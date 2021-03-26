@@ -5,6 +5,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.myapp.data.cache.InternalCache
 import com.example.myapp.data.cache.InternalCacheImpl
+import com.example.myapp.data.cache.UnsplashDatabase
+import com.example.myapp.data.cache.UnsplashModelDao
 /*import com.example.myapp.data.cache.UnsplashDatabase
 import com.example.myapp.data.cache.UnsplashModelDao*/
 import com.example.myapp.repository.UnsplashRepository
@@ -21,35 +23,34 @@ object ApplicationModule {
     val applicationModule: Module = module {
 
         single <UnsplashRepository> {
-            provideRepositoryImpl()
+            UnsplashRepositoryImpl(get())
         }
 
         single <InternalCache> {
             provideInternalCacheImpl()
         }
 
-        /*single {
+        single {
             provideModelDao(get())
         }
 
         single {
             provideUnsplashDatabase(get())
         }
-*/
-        /*viewModel {
-            UnsplashViewModel(get())
-        }*/
+
+        viewModel {
+            UnsplashViewModel(get(), get(), get())
+        }
     }
 
-    private fun provideRepositoryImpl(): UnsplashRepositoryImpl = UnsplashRepositoryImpl()
 
     private fun provideInternalCacheImpl(): InternalCacheImpl = InternalCacheImpl()
 
-    /*private fun provideModelDao(db: UnsplashDatabase) : UnsplashModelDao =
+    private fun provideModelDao(db: UnsplashDatabase) : UnsplashModelDao =
             db.getUnsplashModelDao()
 
     private fun provideUnsplashDatabase(context: Context): UnsplashDatabase =
-            Room.databaseBuilder(context.applicationContext, UnsplashDatabase::class.java, "unsplash_database.db").build()*/
+            Room.databaseBuilder(context.applicationContext, UnsplashDatabase::class.java, "unsplash_database.db").build()
 
 
 

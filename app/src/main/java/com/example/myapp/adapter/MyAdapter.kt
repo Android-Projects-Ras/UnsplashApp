@@ -20,7 +20,6 @@ import com.example.myapp.databinding.RowItemImageBinding
 import com.example.myapp.models.UnsplashModel
 
 
-const val LIST_SIZE = 20
 const val VIEW_TYPE_HEADER = 0
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_FOOTER = 2
@@ -30,7 +29,8 @@ class MyAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerVie
     private var myList = emptyList<RowItemType>()
 
 
-    inner class UnsplashHeaderHolder(private val binding: RowItemHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class UnsplashHeaderHolder(private val binding: RowItemHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind() {
             binding.textView.text = "Welcome!"
@@ -38,7 +38,8 @@ class MyAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerVie
 
     }
 
-    inner class UnsplashImageViewHolder(val binding: RowItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class UnsplashImageViewHolder(val binding: RowItemImageBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
 
         private val path: String? = context.filesDir.path + "/image_manager_disk_cache"
@@ -47,14 +48,15 @@ class MyAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerVie
         fun bind(model: UnsplashModel) {
 
             Glide.with(binding.root)
-
-                    .load(model.urls.regular)
-                    .into(binding.imageView)
+                .load(model.urls.regular)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(binding.imageView)
         }
 
     }
 
-    class UnsplashFooterHolder(private val binding: RowItemFooterBinding) : RecyclerView.ViewHolder(binding.root) {
+    class UnsplashFooterHolder(private val binding: RowItemFooterBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind() {
             binding.textView.text = "That is all!"
@@ -73,9 +75,27 @@ class MyAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerVie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_IMAGE -> UnsplashImageViewHolder(RowItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            VIEW_TYPE_HEADER -> UnsplashHeaderHolder(RowItemHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            else -> UnsplashFooterHolder(RowItemFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            VIEW_TYPE_IMAGE -> UnsplashImageViewHolder(
+                RowItemImageBinding.inflate(
+                    LayoutInflater.from(
+                        parent.context
+                    ), parent, false
+                )
+            )
+            VIEW_TYPE_HEADER -> UnsplashHeaderHolder(
+                RowItemHeaderBinding.inflate(
+                    LayoutInflater.from(
+                        parent.context
+                    ), parent, false
+                )
+            )
+            else -> UnsplashFooterHolder(
+                RowItemFooterBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
 
 
         }

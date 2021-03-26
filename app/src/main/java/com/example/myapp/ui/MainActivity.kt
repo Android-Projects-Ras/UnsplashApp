@@ -26,20 +26,17 @@ class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainBinding
-    //private val viewModel by viewModel<UnsplashViewModel>()
-//    private val internalCache = get<InternalCache>()
+    private val viewModel by viewModel<UnsplashViewModel>()
     private val myAdapter by lazy { MyAdapter(this) }
-    private val unsplashRepository = get<UnsplashRepository>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //val viewModel = getViewModel<UnsplashViewModel>()
         setupRecyclerView()
 
-        val unsplashViewModelFactory = UnsplashViewModelFactory(unsplashRepository)
-        val viewModel = ViewModelProvider(this, unsplashViewModelFactory).get(UnsplashViewModel::class.java)
+//        val unsplashViewModelFactory = UnsplashViewModelFactory(unsplashRepository)
+//        val viewModel = ViewModelProvider(this, unsplashViewModelFactory).get(UnsplashViewModel::class.java)
 
         viewModel.getUnsplashImages()
         viewModel.responseLiveData.observe(this, Observer {
@@ -50,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.errorLiveData.observe(this, Observer {
             if (it != null) {
-                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
         })
 

@@ -5,4 +5,6 @@ import com.example.myapp.models.UnsplashModel
 interface UnsplashRepository {
 
     suspend fun getUnsplashImage(): List<UnsplashModel>
+
+    suspend fun insertAllImages(list: List<UnsplashModel>)
 }

@@ -27,6 +27,7 @@ class InternalCacheImpl : InternalCache {
             BitmapFactory.decodeStream(input)
         } catch (e: IOException) {
             // Log exception
+                e.printStackTrace()
             null
         }
     }
@@ -34,12 +35,14 @@ class InternalCacheImpl : InternalCache {
     override suspend fun saveBitmap(context: Context, bitmap: Bitmap, name: String?) = withContext(Dispatchers.IO) {
         val fileName = "${name ?: UUID.randomUUID().toString().replace("-", "")}.png"
         val file = File(context.cacheDir, fileName)
+        //creates outputstream to write the file
         FileOutputStream(file).use {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)//write to outputstream
         }
         file.toUri()
     }
 
+    //TODO: writing image to IS
     /*public void saveImage(Context context, Bitmap bitmap, String name, String extension){
     name = name + "." + extension;
     FileOutputStream fileOutputStream;
@@ -52,6 +55,8 @@ class InternalCacheImpl : InternalCache {
     }
 }*/
 
+
+    //TODO:
     /*public Bitmap loadImageBitmap(Context context,String name,String extension){
         name = name + "." + extension
         FileInputStream fileInputStream
