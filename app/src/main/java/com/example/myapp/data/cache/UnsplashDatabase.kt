@@ -1,7 +1,8 @@
 package com.example.myapp.data.cache
 
-import android.content.Context
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.myapp.models.UnsplashModel
 
 @Database(entities = [UnsplashModel::class], version = 1)

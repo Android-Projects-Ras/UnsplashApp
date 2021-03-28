@@ -9,14 +9,13 @@ interface UnsplashModelDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertModels(listModels: List<UnsplashModel>)
 
-/*@Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertCachedImagePath(imagePath: String)*/
-
+    @Query("UPDATE unsplash_model_table SET cachedImagePath=:fileURI WHERE id=:modelId")
+    suspend fun updateModel(fileURI: String?, modelId: String)
 
     @Query("SELECT * FROM unsplash_model_table")
     suspend fun getAllModels(): List<UnsplashModel>
 
-    /*@Delete
-    suspend fun deleteAllModels(model: UnsplashModel)//listModels: List<UnsplashModel>*/
+    @Delete
+    suspend fun deleteAllModels(listModels: List<UnsplashModel>)
 
 }

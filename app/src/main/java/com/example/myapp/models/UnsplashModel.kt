@@ -8,7 +8,7 @@ import com.example.myapp.adapter.RowItemType
 
 @Entity(tableName = "unsplash_model_table")
 data class UnsplashModel(
-    val alt_description: String,
+    val alt_description: String?,
     /*val blur_hash: String,
     @Embedded
     val categories: List<Any>,
@@ -31,9 +31,9 @@ data class UnsplashModel(
     val sponsorship: Sponsorship,
     val updated_at: String,*/
     @Embedded(prefix = "urls_")
-    val urls: Urls
+    val urls: Urls,
     /*@Embedded(prefix = "user_")
     val user: User,
     val width: Int*/
-    //val cachedImagePath: String?
+    var cachedImagePath: String?
 ): RowItemType
