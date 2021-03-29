@@ -27,48 +27,19 @@ class InternalCacheImpl : InternalCache {
             BitmapFactory.decodeStream(input)
         } catch (e: IOException) {
             // Log exception
-                e.printStackTrace()
+            e.printStackTrace()
             null
         }
     }
 
-    override suspend fun saveBitmap(context: Context, bitmap: Bitmap, name: String?) = withContext(Dispatchers.IO) {
-        val fileName = "${name ?: UUID.randomUUID().toString().replace("-", "")}.png"
-        val file = File(context.cacheDir, fileName)
-        //creates outputstream to write the file
-        FileOutputStream(file).use {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)//write to outputstream
+    override suspend fun saveBitmap(context: Context, bitmap: Bitmap, name: String?) =
+        withContext(Dispatchers.IO) {
+            val fileName = "${name ?: UUID.randomUUID().toString().replace("-", "")}.png"
+            val file = File(context.cacheDir.path + "/image_manager_disk_cache", fileName)
+            //creates outputstream to write the file
+            FileOutputStream(file).use {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)//write to outputstream
+            }
+            file.toUri()
         }
-        file.toUri()
-    }
-
-    //TODO: writing image to IS
-    /*public void saveImage(Context context, Bitmap bitmap, String name, String extension){
-    name = name + "." + extension;
-    FileOutputStream fileOutputStream;
-    try {
-        fileOutputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-        fileOutputStream.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}*/
-
-
-    //TODO:
-    /*public Bitmap loadImageBitmap(Context context,String name,String extension){
-        name = name + "." + extension
-        FileInputStream fileInputStream
-                Bitmap bitmap = null;
-        try{
-            fileInputStream = context.openFileInput(name);
-            bitmap = BitmapFactory.decodeStream(fileInputStream);
-            fileInputStream.close();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }*/
-
 }

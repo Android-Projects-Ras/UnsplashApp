@@ -41,18 +41,12 @@ class MyAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerVie
     inner class UnsplashImageViewHolder(val binding: RowItemImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-
-        private val path: String? = context.filesDir.path + "/image_manager_disk_cache"
-        private val uri: Uri? = Uri.parse(path)
-
         fun bind(model: UnsplashModel) {
 
             Glide.with(binding.root)
                 .load(model.urls.regular)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.imageView)
         }
-
     }
 
     class UnsplashFooterHolder(private val binding: RowItemFooterBinding) :
@@ -96,25 +90,16 @@ class MyAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerVie
                     false
                 )
             )
-
-
         }
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is UnsplashImageViewHolder -> holder.bind(myList[position] as UnsplashModel)
-            //UnsplashModel cannot be cast to com.example.myapp.adapter.TextItemFooter
             is UnsplashFooterHolder -> holder.bind()
-            //UnsplashModel cannot be cast to com.example.myapp.adapter.TextItemHeader
             is UnsplashHeaderHolder -> holder.bind()
-
-
         }
-
     }
-
 
     override fun getItemCount() = myList.size
 
