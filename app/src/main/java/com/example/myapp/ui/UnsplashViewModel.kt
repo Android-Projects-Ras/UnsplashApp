@@ -51,9 +51,9 @@ class UnsplashViewModel(
     }
 
     private suspend fun cachingImages(modelsList: List<UnsplashModel>) {
-        modelsList.forEach { _ ->
+        modelsList.forEach {
             val imageBitmap = internalCache.loadBitmap(modelsList[0].urls.regular)
-            imageBitmap?.let { internalCache.saveBitmap(context, it, "hi") }
+            imageBitmap?.let { internalCache.saveBitmap(context, it) }
         }
     }
 
