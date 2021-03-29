@@ -23,7 +23,7 @@ class CustomItemDecoration(
 
     }
 
-    fun dpToPx(context: Context, dp: Int): Float {
+    private fun dpToPx(context: Context, dp: Int): Float {
         return dp * context.resources.displayMetrics.density
 
     }

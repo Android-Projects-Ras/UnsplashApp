@@ -3,9 +3,9 @@ package com.example.myapp.data.cache
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.myapp.models.UnsplashModel
+import com.example.myapp.models.UnsplashModelEntity
 
-@Database(entities = [UnsplashModel::class], version = 1)
+@Database(entities = [UnsplashModelEntity::class], version = 1)
 @TypeConverters(Converters::class)
 
 abstract class UnsplashDatabase: RoomDatabase() {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.adapter.CustomItemDecoration
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<UnsplashViewModel>()
-    private val myAdapter by lazy { MyAdapter(this) }
+    private val myAdapter by lazy { MyAdapter() }
     //private val unsplashRepository = get<UnsplashRepository>()
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -32,18 +33,9 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
 
 
-        if (viewModel.hasInternetConnection(this)) {
-            viewModel.getUnsplashImages()
-        } else {
-            CoroutineScope(Dispatchers.IO).launch {
-                viewModel.getCachedUnsplashImages()
-
-            }
-        }
-
-        viewModel.getUnsplashImages()
         viewModel.responseLiveData.observe(this, Observer {
             it?.let {
+
                 myAdapter.setData(it)
             }
         })
@@ -51,6 +43,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.errorLiveData.observe(this, Observer {
             if (it != null) {
+                binding.recyclerView.isVisible = false
+                binding.textView.isVisible = true
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
         })

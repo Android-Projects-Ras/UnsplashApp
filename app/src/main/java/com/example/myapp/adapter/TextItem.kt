@@ -1,7 +1,5 @@
 package com.example.myapp.adapter
 
-import com.example.myapp.models.UnsplashModel
-
-data class TextItemHeader(
+data class TextItem(
         val title: String
 ): RowItemType

@@ -1,6 +1,6 @@
 package com.example.myapp.data.api
 
-import com.example.myapp.models.UnsplashModel
+import com.example.myapp.models.UnsplashModelResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -22,5 +22,5 @@ interface UnsplashApi {
         @Query("per_page")
         itemsNumber: Int = 20
 
-    ): List<UnsplashModel>
+    ): List<UnsplashModelResponse>
 }
