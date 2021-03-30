@@ -14,6 +14,8 @@ import com.example.myapp.data.cache.UnsplashModelDao
 import com.example.myapp.repository.UnsplashRepository
 import com.example.myapp.repository.UnsplashRepositoryImpl
 import com.example.myapp.ui.UnsplashViewModel
+import com.example.myapp.usecases.GetPhotosUseCase
+import com.example.myapp.usecases.GetPhotosUseCaseImpl
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
@@ -27,7 +29,8 @@ object ApplicationModule {
     val applicationModule: Module = module {
 
         single {
-            provideGsonConverterFactory()
+            //provideGsonConverterFactory()
+            GsonConverterFactory.create()
         }
 
         //creating Retrofit instance
@@ -48,7 +51,7 @@ object ApplicationModule {
         }
 
         single <InternalCache> {
-            provideInternalCacheImpl()
+            InternalCacheImpl()
         }
 
         single {
@@ -60,15 +63,16 @@ object ApplicationModule {
         }
 
         viewModel {
-            UnsplashViewModel(get(), get(), get())
+            UnsplashViewModel(get())
+        }
+
+        single<GetPhotosUseCase> {
+            GetPhotosUseCaseImpl(get(), get(), get())
         }
     }
 
-    private fun provideGsonConverterFactory(): GsonConverterFactory =
-        GsonConverterFactory.create()
-
-
-    private fun provideInternalCacheImpl(): InternalCacheImpl = InternalCacheImpl()
+    /*private fun provideGsonConverterFactory(): GsonConverterFactory =
+        GsonConverterFactory.create()*/
 
     private fun provideModelDao(db: UnsplashDatabase) : UnsplashModelDao =
             db.getUnsplashModelDao()

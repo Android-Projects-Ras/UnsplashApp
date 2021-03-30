@@ -61,15 +61,15 @@ class UnsplashRepositoryImpl(
     }
 
     override suspend fun getFileURIs(): List<String> {
-        val pattern = "[.][0]$".toRegex()
+        //val pattern = "[.][0]$".toRegex()
         val fileURIs = ArrayList<String>()
         val folder = File(path)
         val filesInFolder = folder.listFiles()
         filesInFolder?.forEach {
             val fileUri = it.toURI().toString()
-            if (pattern.containsMatchIn(fileUri)) {
+            //if (pattern.containsMatchIn(fileUri)) {
                 fileURIs.add(fileUri)
-            }
+            //}
         }
         return fileURIs
     }

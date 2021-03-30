@@ -33,12 +33,14 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
 
 
-        viewModel.responseLiveData.observe(this, Observer {
-            it?.let {
 
-                myAdapter.setData(it)
-            }
-        })
+            viewModel.responseLiveData.observe(this, Observer {
+                it?.let {
+
+                    myAdapter.setData(it)
+                }
+            })
+
 
 
         viewModel.errorLiveData.observe(this, Observer {

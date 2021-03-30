@@ -12,4 +12,4 @@ data class UnsplashModelEntity(
     val description: String?,
     val url: String?,
     var cachedImagePath: String?
-): RowItemType
+)/*: RowItemType*/
