@@ -17,6 +17,8 @@ import com.example.myapp.ui.UnsplashViewModel
 import com.example.myapp.usecases.GetPhotosUseCase
 import com.example.myapp.usecases.GetPhotosUseCaseImpl
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -38,7 +40,7 @@ object ApplicationModule {
             Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(get<GsonConverterFactory>())
-                .client(OkHttpClient.Builder().build())
+                .client(OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply { setLevel(HttpLoggingInterceptor.Level.BODY) }).build())
                 .build()
         }
 
@@ -55,11 +57,13 @@ object ApplicationModule {
         }
 
         single {
-            provideModelDao(get())
+//            provideModelDao(get())
+            get<UnsplashDatabase>().getUnsplashModelDao()
         }
 
         single {
-            provideUnsplashDatabase(get())
+//            provideUnsplashDatabase(get())
+            Room.databaseBuilder(androidContext(), UnsplashDatabase::class.java, "unsplash_database.db").build()
         }
 
         viewModel {
@@ -70,17 +74,4 @@ object ApplicationModule {
             GetPhotosUseCaseImpl(get(), get(), get())
         }
     }
-
-    /*private fun provideGsonConverterFactory(): GsonConverterFactory =
-        GsonConverterFactory.create()*/
-
-    private fun provideModelDao(db: UnsplashDatabase) : UnsplashModelDao =
-            db.getUnsplashModelDao()
-
-    private fun provideUnsplashDatabase(context: Context): UnsplashDatabase =
-            Room.databaseBuilder(context.applicationContext, UnsplashDatabase::class.java, "unsplash_database.db").build()
-
-
-
-
 }

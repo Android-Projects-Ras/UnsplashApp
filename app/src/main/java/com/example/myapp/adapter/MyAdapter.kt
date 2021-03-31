@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.myapp.R
 import com.example.myapp.databinding.RowItemImageBinding
 import com.example.myapp.databinding.RowItemTextBinding
 import com.example.myapp.models.UnsplashModel
@@ -67,7 +68,8 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bind(model: UnsplashModel) {
 
             Glide.with(binding.root)
-                .load(model.url)   //pass url or cachedImagePath
+                .load(model.url)
+                .placeholder(R.drawable.spinner)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.imageView)
         }

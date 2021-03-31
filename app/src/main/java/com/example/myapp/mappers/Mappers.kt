@@ -6,19 +6,17 @@ import com.example.myapp.models.UnsplashModelResponse
 
 fun UnsplashModelResponse.toUnsplashModel(): UnsplashModel {  // response to domain
     return UnsplashModel(
-        id = this.id,
-        description = this.description?.toString(),
-        url = this.urls.regular,
-        cachedImagePath = null
+        id = this.id ?: throw Exception("id is null"),
+        description = this.description ?: "",
+        url = this.urls?.regular ?: ""
     )
 }
 
 fun UnsplashModelEntity.toUnsplashModel(): UnsplashModel {   //  entity to domain
     return UnsplashModel(
         id = this.id,
-        description = this.description,
-        url = this.url,
-        cachedImagePath = this.cachedImagePath
+        description = this.description ?: "",
+        url = this.url ?: ""
     )
 }
 
@@ -27,7 +25,7 @@ fun UnsplashModel.toUnsplashModelEntity(): UnsplashModelEntity {   //  domain to
         id = this.id,
         description = this.description,
         url = this.url,
-        cachedImagePath = this.cachedImagePath
+        cachedImagePath = null
     )
 }
 

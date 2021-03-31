@@ -7,12 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.adapter.RowItemType
+import com.example.myapp.adapter.TextItem
 import com.example.myapp.usecases.GetPhotosUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.ArrayList
 
-@RequiresApi(Build.VERSION_CODES.M)
+//@RequiresApi(Build.VERSION_CODES.M)
 class UnsplashViewModel(
 
     private val getPhotosUseCase: GetPhotosUseCase
@@ -33,9 +36,20 @@ class UnsplashViewModel(
 
     init {
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val listImages = getPhotosUseCase.execute()
-            responseLiveData.postValue(listImages)
+        viewModelScope.launch() {
+            val listImages = withContext(Dispatchers.IO) {
+                val list = getPhotosUseCase.execute()
+                ArrayList<RowItemType>(list).apply {
+                    add(0, TextItem("Hello"))
+                    add(TextItem("Bye"))
+                }
+            }
+
+            if (listImages.isNullOrEmpty()) {
+                errorLiveData.value = "List is empty"
+            } else {
+                responseLiveData.value = listImages
+            }
         }
 
     }

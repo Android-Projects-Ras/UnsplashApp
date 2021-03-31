@@ -32,7 +32,7 @@ class UnsplashRepositoryImpl(
 ) : UnsplashRepository {
 
 
-    private val path: String = context.cacheDir.path + "/image_manager_disk_cache"
+    private val path: String = context.cacheDir.path
 
     override suspend fun getUnsplashImage(): List<UnsplashModel> {
         //map to UnsplashModel

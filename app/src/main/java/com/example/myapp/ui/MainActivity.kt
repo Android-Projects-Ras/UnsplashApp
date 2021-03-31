@@ -32,16 +32,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupRecyclerView()
 
+        viewModel.responseLiveData.observe(this, Observer {
+            binding.progressBar.isVisible = true
+            it?.let {
 
-
-            viewModel.responseLiveData.observe(this, Observer {
-                it?.let {
-
-                    myAdapter.setData(it)
-                }
-            })
-
-
+                myAdapter.setData(it)
+            }
+            binding.progressBar.isVisible = false
+        })
 
         viewModel.errorLiveData.observe(this, Observer {
             if (it != null) {
@@ -56,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = myAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.addItemDecoration(
-            CustomItemDecoration(this, 8, 8, 16, 0)
+            CustomItemDecoration(8, 8, 16, 0)
         )
     }
 }

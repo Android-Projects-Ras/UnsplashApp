@@ -1,7 +1,7 @@
 package com.example.myapp.usecases
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
+import android.widget.Toast
 import com.example.myapp.adapter.RowItemType
 import com.example.myapp.adapter.TextItem
 import com.example.myapp.data.cache.InternalCache
@@ -10,7 +10,6 @@ import com.example.myapp.mappers.toUnsplashModelEntity
 import com.example.myapp.models.UnsplashModel
 import com.example.myapp.repository.UnsplashRepository
 import kotlinx.coroutines.*
-import java.io.File
 import java.util.ArrayList
 
 interface GetPhotosUseCase {
@@ -25,74 +24,63 @@ class GetPhotosUseCaseImpl(
 
     override suspend fun execute(): List<RowItemType> {
         // get list of images
-        val listImages = getUnsplashImages()
-        return listImages
+        return getUnsplashImages()
 
     }
 
     private suspend fun getUnsplashImages(): List<RowItemType> {
         try {
 
-            val resp = repository.getUnsplashImage()
-            val resultList = ArrayList<RowItemType>(resp).apply {
-                add(0, TextItem("Hello"))
-                add(TextItem("Bye"))
-            }
-            repository.clearCacheAndRoom()
 
-            //withContext(Dispatchers.IO) {
+            val resp = repository.getUnsplashImage()
+            val resultList = ArrayList<RowItemType>(resp)
+
+            withContext(Dispatchers.IO) {
+                repository.clearCacheAndRoom()
                 val listEntityWithURIs = cachingImages(resp)
                 addAllModelsToDb(listEntityWithURIs)
-                // save models to DB
-            //}
+            }
             return resultList
 
         } catch (e: Exception) {
             e.printStackTrace()
             //errorLiveData.value = e.message
-            getCachedUnsplashImages()
+            return getCachedUnsplashImages()
         }
 
-        return emptyList()
     }
 
     suspend fun getCachedUnsplashImages(): List<RowItemType> {
-        val path: String = context.cacheDir.path + "/image_manager_disk_cache"
-        val folder = File(path)
-        val filesInFolder = folder.listFiles()
-        if (filesInFolder.isNullOrEmpty()) {
-            repository.clearCacheAndRoom()
-        }
         val cachedUnsplashImagesURIs = repository.getAllModels()
+        /*if (cachedUnsplashImagesURIs.isNullOrEmpty()) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "List is empty", Toast.LENGTH_LONG).show()
+            }
+        }*/
 
 
-        val resultList = ArrayList<RowItemType>(cachedUnsplashImagesURIs.map {
+        return ArrayList<RowItemType>(cachedUnsplashImagesURIs.map {
             it.toUnsplashModel()
-        }).apply {
-            add(0, TextItem("Hello"))
-            add(TextItem("Bye"))
-        }
-        return resultList
+        })
 
     }
 
 
-    private fun addAllModelsToDb(resp: List<UnsplashModel>) {
-        CoroutineScope(Dispatchers.IO).launch {
-            repository.insertAllImages(resp.map {
-                it.toUnsplashModelEntity()
-            })
-        }
+    private suspend fun addAllModelsToDb(resp: List<UnsplashModel>) {
+        repository.insertAllImages(resp.map {
+            it.toUnsplashModelEntity()
+        })
     }
 
     private suspend fun cachingImages(modelsList: List<UnsplashModel>): List<UnsplashModel> {
         val entityListWithURIs = ArrayList<UnsplashModel>()
-        modelsList.forEach {
-            val imageBitmap = it.url?.let { it1 -> internalCache.loadBitmap(it1) }
-            val fileURI =
-                imageBitmap?.let { it -> internalCache.saveBitmap(context, it) }
-            it.cachedImagePath = fileURI.toString()
-            entityListWithURIs.add(it)
+        modelsList.forEach { unsplashModel ->
+            val imageBitmap = unsplashModel.url?.let { internalCache.loadBitmap(it) }
+            val fileURI = imageBitmap?.let { internalCache.saveBitmap(context, it) }
+            //it.cachedImagePath = fileURI.toString()
+            val newUnsplash = unsplashModel.copy(url = fileURI.toString())
+            //it.url = fileURI.toString()
+            entityListWithURIs.add(newUnsplash)
 
         }
 

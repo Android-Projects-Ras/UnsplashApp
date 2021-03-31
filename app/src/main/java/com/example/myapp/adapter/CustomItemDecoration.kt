@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 class CustomItemDecoration(
-        private val context: Context,
         private val leftOffset: Int,
         private val rightOffset: Int,
         private val topOffset: Int,
@@ -15,10 +14,10 @@ class CustomItemDecoration(
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, itemPosition: Int, parent: RecyclerView) {
-        outRect.left = dpToPx(context, leftOffset).toInt()
-        outRect.right = dpToPx(context, rightOffset).toInt()
-        outRect.top = dpToPx(context, topOffset).toInt()
-        outRect.bottom = dpToPx(context, bottomOffset).toInt()
+        outRect.left = dpToPx(parent.context, leftOffset).toInt()
+        outRect.right = dpToPx(parent.context, rightOffset).toInt()
+        outRect.top = dpToPx(parent.context, topOffset).toInt()
+        outRect.bottom = dpToPx(parent.context, bottomOffset).toInt()
 
 
     }
