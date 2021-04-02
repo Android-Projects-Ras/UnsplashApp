@@ -5,7 +5,7 @@ import com.example.myapp.adapter.RowItemType
 data class UnsplashModel(
     val id: String,
     val description: String,
-    val url: String
-    //var cachedImagePath: String?
+    val url: String,
+    val likesNumber: Int
 
 ): RowItemType

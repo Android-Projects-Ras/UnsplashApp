@@ -7,7 +7,7 @@
     android:viewportWidth="492.719"
     android:width="24dp" >
     <path android:fillColor="#FFF"
-        android:strokeWidth="0.5"
+        android:strokeWidth="3.0"
         android:strokeColor="@color/black"
         android:pathData="M492.719,166.008c0,-73.486 -59.573,-133.056 -133.059,-133.056c-47.985,
                         0 -89.891,25.484 -113.302,63.569c-23.408,-38.085 -65.332,-63.569 -113.316,

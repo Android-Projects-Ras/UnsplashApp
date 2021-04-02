@@ -15,7 +15,8 @@ import com.example.myapp.models.UnsplashModelEntity
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 
-class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyAdapter(/*callback*/): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
 
     private var myList = emptyList<RowItemType>()
 
@@ -65,7 +66,13 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class UnsplashImageViewHolder(private val binding: RowItemImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+
         fun bind(model: UnsplashModel) {
+            //clickListener
+
+            binding.likeButton.setOnClickListener {
+
+            }
 
             Glide.with(binding.root)
                 .load(model.url)
@@ -81,5 +88,9 @@ class MyAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is UnsplashModel -> VIEW_TYPE_IMAGE
             else -> VIEW_TYPE_IMAGE
         }
+    }
+
+    interface OnLikeClickListener {
+        fun onLikeClick()
     }
 }

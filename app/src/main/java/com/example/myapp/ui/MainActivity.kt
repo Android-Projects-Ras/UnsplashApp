@@ -11,9 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -32,7 +29,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupRecyclerView()
 
-        viewModel.responseLiveData.observe(this, Observer {
+
+        viewModel.listLiveData.observe(this, Observer {
             binding.progressBar.isVisible = true
             it?.let {
 
@@ -49,6 +47,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+//viewM.funCalllback
 
     private fun setupRecyclerView() {
         binding.recyclerView.adapter = myAdapter

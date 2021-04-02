@@ -13,33 +13,19 @@
         android:scaleType="fitXY"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
+    <com.example.myapp.ui.LikeButton
+        android:id="@+id/like_button"
         android:layout_width="100dp"
         android:layout_height="50dp"
-
-        android:background="@drawable/custom_button"
         android:layout_gravity="bottom"
+        app:cardCornerRadius="15dp"
+        android:clickable="true"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
-        android:drawableLeft="@drawable/heart_red"/>
+        android:focusable="true" />
 
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        style="@style/Widget.MaterialComponents.Button.Icon"
-        app:icon = "@drawable/heart_red"
-        android:textSize="10sp"
-        android:text=""
-        android:textColor="@color/black"/>
 
-    <ImageButton
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/heart_red"
-        android:layout_gravity="end"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        />
+
 
 </androidx.cardview.widget.CardView>
 

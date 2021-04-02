@@ -1,8 +1,6 @@
 package com.example.myapp.ui
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +21,7 @@ class UnsplashViewModel(
 ) : ViewModel() {
 
 
-    val responseLiveData = MutableLiveData<List<RowItemType>>()
+    val listLiveData = MutableLiveData<List<RowItemType>>()
     val errorLiveData = MutableLiveData<String>()
 
     private val errorHandler: CoroutineExceptionHandler =
@@ -48,7 +46,7 @@ class UnsplashViewModel(
             if (listImages.isNullOrEmpty()) {
                 errorLiveData.value = "List is empty"
             } else {
-                responseLiveData.value = listImages
+                listLiveData.value = listImages
             }
         }
 

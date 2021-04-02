@@ -1,13 +1,13 @@
 package com.example.myapp
 
 import android.app.Application
-import com.example.myapp.di.ApplicationModule
+import com.example.myapp.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
-class MainApplication: Application() {
+class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -18,7 +18,15 @@ class MainApplication: Application() {
             //inject Android context
             androidContext(this@MainApplication)
             // use modules
-            modules(listOf(ApplicationModule.applicationModule))
+            modules(
+                listOf(
+                    useCaseModule,
+                    viewModelModule,
+                    roomDatabaseModule,
+                    retrofitModule,
+                    repositoryModule
+                )
+            )
         }
 
     }
