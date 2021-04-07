@@ -6,6 +6,6 @@ data class UnsplashModel(
     val id: String,
     val description: String,
     val url: String,
-    val likesNumber: Int
+    var likesNumber: Int
 
 ): RowItemType

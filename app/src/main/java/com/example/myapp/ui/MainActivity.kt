@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<UnsplashViewModel>()
-    private val myAdapter by lazy { MyAdapter() }
+    private val myAdapter by lazy { MyAdapter()}
     //private val unsplashRepository = get<UnsplashRepository>()
 
     @RequiresApi(Build.VERSION_CODES.M)

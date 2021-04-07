@@ -49,16 +49,5 @@ class UnsplashViewModel(
                 listLiveData.value = listImages
             }
         }
-
     }
-
-
-    /*@RequiresApi(Build.VERSION_CODES.M)         // ?
-    private fun hasInternetConnection(context: Context): Boolean {
-        val conManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = conManager.activeNetwork
-        return networkInfo != null
-    }*/
-
 }

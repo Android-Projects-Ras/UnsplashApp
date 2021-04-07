@@ -52,13 +52,6 @@ class GetPhotosUseCaseImpl(
 
     suspend fun getCachedUnsplashImages(): List<RowItemType> {
         val cachedUnsplashImagesURIs = repository.getAllModels()
-        /*if (cachedUnsplashImagesURIs.isNullOrEmpty()) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, "List is empty", Toast.LENGTH_LONG).show()
-            }
-        }*/
-
-
         return ArrayList<RowItemType>(cachedUnsplashImagesURIs.map {
             it.toUnsplashModel()
         })

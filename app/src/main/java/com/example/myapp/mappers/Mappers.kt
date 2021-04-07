@@ -8,7 +8,8 @@ fun UnsplashModelResponse.toUnsplashModel(): UnsplashModel {  // response to dom
     return UnsplashModel(
         id = this.id ?: throw Exception("id is null"),
         description = this.description ?: "",
-        url = this.urls?.regular ?: ""
+        url = this.urls?.regular ?: "",
+        likesNumber = 0
     )
 }
 
@@ -16,7 +17,8 @@ fun UnsplashModelEntity.toUnsplashModel(): UnsplashModel {   //  entity to domai
     return UnsplashModel(
         id = this.id,
         description = this.description ?: "",
-        url = this.url ?: ""
+        url = this.url ?: "",
+        likesNumber = 0
     )
 }
 

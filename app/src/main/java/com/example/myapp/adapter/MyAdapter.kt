@@ -1,7 +1,11 @@
 package com.example.myapp.adapter
 
+import android.content.res.Resources
+import android.graphics.drawable.StateListDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -10,12 +14,13 @@ import com.example.myapp.databinding.RowItemImageBinding
 import com.example.myapp.databinding.RowItemTextBinding
 import com.example.myapp.models.UnsplashModel
 import com.example.myapp.models.UnsplashModelEntity
+import kotlin.random.Random
 
 
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 
-class MyAdapter(/*callback*/): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     private var myList = emptyList<RowItemType>()
@@ -66,31 +71,46 @@ class MyAdapter(/*callback*/): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class UnsplashImageViewHolder(private val binding: RowItemImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        val randomed = Random.nextInt(0, 10)
+        var isLiked = true
 
         fun bind(model: UnsplashModel) {
-            //clickListener
 
-            binding.likeButton.setOnClickListener {
-
-            }
 
             Glide.with(binding.root)
                 .load(model.url)
-                .placeholder(R.drawable.spinner)
+                //.placeholder(R.drawable.glide_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.imageView)
+
+            (myList[adapterPosition] as UnsplashModel).likesNumber = randomed
+            val randomedLikesNumber = (myList[layoutPosition] as UnsplashModel).likesNumber
+            binding.likesTv.text = randomedLikesNumber.toString()
+
+            binding.likeButton.setOnClickListener {
+                if (isLiked) {
+                    binding.likesTv.text = randomedLikesNumber.plus(1).toString()
+                    binding.likeButton.isSelected = true
+                    isLiked = false
+
+                } else {
+                    binding.likesTv.text = randomedLikesNumber.toString()
+                    binding.likeButton.isSelected = false
+                    isLiked = true
+                }
+            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(myList[position]) {
+        return when (myList[position]) {
             is TextItem -> VIEW_TYPE_TEXT
             is UnsplashModel -> VIEW_TYPE_IMAGE
             else -> VIEW_TYPE_IMAGE
         }
     }
 
-    interface OnLikeClickListener {
+    /*interface OnLikeClickListener {
         fun onLikeClick()
-    }
+    }*/
 }

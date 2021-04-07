@@ -24,6 +24,28 @@
         android:layout_marginBottom="8dp"
         android:focusable="true" />
 
+    <TextView
+        android:id="@+id/likes_tv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="116dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/cicle_background"
+        android:text="0"
+        android:gravity="center"
+        android:textSize="12sp" />
+
+    <!--<com.example.myapp.ui.LikesNumber
+        android:id="@+id/likes_tv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/cicle_background"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="116dp"
+        android:layout_marginBottom="8dp"
+        />-->
+
 
 
 
