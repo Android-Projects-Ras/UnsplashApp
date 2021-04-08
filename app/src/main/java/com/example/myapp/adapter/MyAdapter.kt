@@ -20,7 +20,7 @@ import kotlin.random.Random
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 
-class MyAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyAdapter(/* todo: Сюда колбек в фрагмент для прослушивания нажатия на кнопку */) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     private var myList = emptyList<RowItemType>()
@@ -72,7 +72,7 @@ class MyAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
 
         val randomed = Random.nextInt(0, 10)
-        var isLiked = true
+        var isLiked = true // todo: поле должно быть в модели, чтобы не было того, что я скинул тебе на видео
 
         fun bind(model: UnsplashModel) {
 
@@ -83,14 +83,14 @@ class MyAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.imageView)
 
-            (myList[adapterPosition] as UnsplashModel).likesNumber = randomed
+            (myList[adapterPosition] as UnsplashModel).likesNumber = randomed //todo:  удали рандом из адаптера, можешь вынести в репозиторий в место, где мапишь
             val randomedLikesNumber = (myList[layoutPosition] as UnsplashModel).likesNumber
             binding.likesTv.text = randomedLikesNumber.toString()
 
             binding.likeButton.setOnClickListener {
                 if (isLiked) {
                     binding.likesTv.text = randomedLikesNumber.plus(1).toString()
-                    binding.likeButton.isSelected = true
+                    binding.likeButton.isSelected = true //todo:  обновление лайков через обновление полей модели, которое нужно делать во вью модели
                     isLiked = false
 
                 } else {

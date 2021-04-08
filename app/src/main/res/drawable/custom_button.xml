@@ -2,11 +2,11 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@drawable/heart_red" android:state_pressed="true"/>
-    <item android:drawable="@drawable/heart_red" android:state_selected="true"/>
+    <item android:drawable="@drawable/heart_red" android:state_selected="true"/> <!--todo: зачем поля state_selected и state_checked одновременно? -->
     <item android:drawable="@drawable/heart_red" android:state_checked="true"/>
-    <item android:drawable="@drawable/heart_red" android:state_checkable="true"/>
+    <item android:drawable="@drawable/heart_red" android:state_checkable="true"/> <!-- todo: для чего это поле?-->
 
-    <item android:drawable="@drawable/heart_white" android:state_pressed="false"/>
+    <item android:drawable="@drawable/heart_white" android:state_pressed="false"/> <!--todo: все эти 3 стейта лишние, так как если ничего из стейтов выше не совпадёт будет использован дефолтный стейт-->
     <item android:drawable="@drawable/heart_white" android:state_selected="false"/>
     <item android:drawable="@drawable/heart_white" android:state_checked="false"/>
 

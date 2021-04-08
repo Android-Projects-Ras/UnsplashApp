@@ -7,6 +7,8 @@
     android:layout_height="50dp"
     app:cardCornerRadius="16dp">
 
+<!--    todo: удали CardView и для ConstraintLayout ниже добавь background из drawable, созданный через shape rectangle -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

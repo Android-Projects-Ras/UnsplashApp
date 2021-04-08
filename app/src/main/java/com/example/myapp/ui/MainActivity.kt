@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
 
         viewModel.listLiveData.observe(this, Observer {
-            binding.progressBar.isVisible = true
+            binding.progressBar.isVisible = true // todo: а для чего тут изменение видимости progressBar?. Должна быть отдельная лайвдата для прослушивания загрузки данных, которая бы отвечала за видимость progressBar
             it?.let {
 
                 myAdapter.setData(it)

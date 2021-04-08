@@ -34,7 +34,7 @@ class UnsplashViewModel(
 
     init {
 
-        viewModelScope.launch() {
+        viewModelScope.launch() { //todo: потерял errorHandler, в случае ошибки приложение крашнется
             val listImages = withContext(Dispatchers.IO) {
                 val list = getPhotosUseCase.execute()
                 ArrayList<RowItemType>(list).apply {
@@ -43,7 +43,7 @@ class UnsplashViewModel(
                 }
             }
 
-            if (listImages.isNullOrEmpty()) {
+            if (listImages.isNullOrEmpty()) { //todo: как он может быть пустым, если ты руками добавляешь TextItem("Hello") и TextItem("Bye"). Проверку нужно делать на данные с бекенда
                 errorLiveData.value = "List is empty"
             } else {
                 listLiveData.value = listImages
