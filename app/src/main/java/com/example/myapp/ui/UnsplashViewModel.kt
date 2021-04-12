@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.adapter.RowItemType
 import com.example.myapp.adapter.TextItem
+import com.example.myapp.models.UnsplashModel
 import com.example.myapp.usecases.GetPhotosUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -34,20 +35,31 @@ class UnsplashViewModel(
 
     init {
 
-        viewModelScope.launch() {
-            val listImages = withContext(Dispatchers.IO) {
-                val list = getPhotosUseCase.execute()
-                ArrayList<RowItemType>(list).apply {
-                    add(0, TextItem("Hello"))
-                    add(TextItem("Bye"))
-                }
-            }
+        viewModelScope.launch(errorHandler) {
+            withContext(Dispatchers.IO) {
 
-            if (listImages.isNullOrEmpty()) {
-                errorLiveData.value = "List is empty"
-            } else {
-                listLiveData.value = listImages
+                //взять лайкнутый элемент из list
+                //изменить поля элемента isLiked & likesNumber
+                //записать обновленный list в listLiveData
+                val list = getPhotosUseCase.execute()
+
+                if (list.isNullOrEmpty()) {
+                    errorLiveData.value = "List is empty"
+                } else {
+                    val listImages = ArrayList<RowItemType>(list).apply {
+                        add(0, TextItem("Hello"))
+                        add(TextItem("Bye"))
+                    }
+                    listLiveData.postValue(listImages)
+                }
             }
         }
     }
+
+    //fun from MainActivity
+    fun updateValue(status: Boolean, likedElementId: String) {
+        //listLiveData.value =
+    }
+
+
 }

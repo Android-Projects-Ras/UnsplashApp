@@ -8,6 +8,7 @@ import com.example.myapp.models.UnsplashModel
 import com.example.myapp.models.UnsplashModelEntity
 import java.io.File
 import java.util.*
+import kotlin.random.Random
 
 interface UnsplashRepository {
 
@@ -37,7 +38,9 @@ class UnsplashRepositoryImpl(
     override suspend fun getUnsplashImage(): List<UnsplashModel> {
         //map to UnsplashModel
         return api.searchImages().map {
-            it.toUnsplashModel()
+            val randomedLikes = Random.nextInt(0, 10)
+            val randomedState = Random.nextBoolean()
+            it.toUnsplashModel().copy(likesNumber = randomedLikes, isLiked = randomedState)
         }
     }
 
@@ -66,7 +69,7 @@ class UnsplashRepositoryImpl(
         val filesInFolder = folder.listFiles()
         filesInFolder?.forEach {
             val fileUri = it.toURI().toString()
-                fileURIs.add(fileUri)
+            fileURIs.add(fileUri)
         }
         return fileURIs
     }

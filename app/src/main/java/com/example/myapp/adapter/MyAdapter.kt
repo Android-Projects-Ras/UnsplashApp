@@ -1,26 +1,19 @@
 package com.example.myapp.adapter
 
-import android.content.res.Resources
-import android.graphics.drawable.StateListDrawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.myapp.R
 import com.example.myapp.databinding.RowItemImageBinding
 import com.example.myapp.databinding.RowItemTextBinding
 import com.example.myapp.models.UnsplashModel
-import com.example.myapp.models.UnsplashModelEntity
-import kotlin.random.Random
 
 
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 
-class MyAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     private var myList = emptyList<RowItemType>()
@@ -71,9 +64,6 @@ class MyAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class UnsplashImageViewHolder(private val binding: RowItemImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        val randomed = Random.nextInt(0, 10)
-        var isLiked = true
-
         fun bind(model: UnsplashModel) {
 
 
@@ -83,20 +73,24 @@ class MyAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.imageView)
 
-            (myList[adapterPosition] as UnsplashModel).likesNumber = randomed
-            val randomedLikesNumber = (myList[layoutPosition] as UnsplashModel).likesNumber
-            binding.likesTv.text = randomedLikesNumber.toString()
+            binding.likeButton.isSelected = !model.isLiked
+
+            //TODO: get access to likes_tv
+            //binding.likesTv.text = model.likesNumber.toString()
 
             binding.likeButton.setOnClickListener {
-                if (isLiked) {
-                    binding.likesTv.text = randomedLikesNumber.plus(1).toString()
-                    binding.likeButton.isSelected = true
-                    isLiked = false
+                if (!model.isLiked) {        //if image is liked
+                    binding.likeButton.isSelected = false
+                    model.isLiked = false            //?
+                    //find model by id?
+                    likeListener?.invoke(true, model.id)
 
                 } else {
-                    binding.likesTv.text = randomedLikesNumber.toString()
-                    binding.likeButton.isSelected = false
-                    isLiked = true
+
+                    binding.likeButton.isSelected = true
+                    model.isLiked = true
+
+                    likeListener?.invoke(false, model.id)
                 }
             }
         }

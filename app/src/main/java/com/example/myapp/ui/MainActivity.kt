@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
+import com.example.myapp.adapter.RowItemType
 import com.example.myapp.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,10 +20,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<UnsplashViewModel>()
-    private val myAdapter by lazy { MyAdapter()}
+    private val myAdapter by lazy { MyAdapter(
+        likeListener = fun(status: Boolean, id: String) {
+            viewModel.updateValue(status, id)  //update domain model in ViewModel
+        }
+    )}
     //private val unsplashRepository = get<UnsplashRepository>()
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -47,7 +51,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-//viewM.funCalllback
 
     private fun setupRecyclerView() {
         binding.recyclerView.adapter = myAdapter

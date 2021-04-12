@@ -24,7 +24,8 @@ class GetPhotosUseCaseImpl(
 
     override suspend fun execute(): List<RowItemType> {
         // get list of images
-        return getUnsplashImages()
+        val imagesList = getUnsplashImages()
+        return imagesList
 
     }
 
@@ -70,14 +71,20 @@ class GetPhotosUseCaseImpl(
         modelsList.forEach { unsplashModel ->
             val imageBitmap = unsplashModel.url?.let { internalCache.loadBitmap(it) }
             val fileURI = imageBitmap?.let { internalCache.saveBitmap(context, it) }
-            //it.cachedImagePath = fileURI.toString()
             val newUnsplash = unsplashModel.copy(url = fileURI.toString())
-            //it.url = fileURI.toString()
             entityListWithURIs.add(newUnsplash)
-
         }
-
         return entityListWithURIs
+    }
+
+    fun addLike(list: List<RowItemType>, likedElementId: String): List<RowItemType> {
+        list.forEach {
+            val element = it as UnsplashModel
+            if (element.id == likedElementId) {
+                element.likesNumber.plus(1)
+            }
+        }
+        return list
     }
 
 }

@@ -15,38 +15,14 @@
 
     <com.example.myapp.ui.LikeButton
         android:id="@+id/like_button"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:cardCornerRadius="15dp"
-        android:clickable="true"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
-        android:focusable="true" />
-
-    <TextView
-        android:id="@+id/likes_tv"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="116dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/cicle_background"
-        android:text="0"
-        android:gravity="center"
-        android:textSize="12sp" />
-
-    <!--<com.example.myapp.ui.LikesNumber
-        android:id="@+id/likes_tv"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/cicle_background"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="116dp"
-        android:layout_marginBottom="8dp"
-        />-->
-
-
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="15dp"/>   <!--wow!!!!-->
 
 
 </androidx.cardview.widget.CardView>
