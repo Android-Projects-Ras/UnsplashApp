@@ -1,5 +1,6 @@
 package com.example.myapp.ui
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupRecyclerView()
+        setupRecyclerView(this)
 
 
         viewModel.listLiveData.observe(this, Observer {
@@ -52,11 +53,13 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun setupRecyclerView() {
-        binding.recyclerView.adapter = myAdapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.addItemDecoration(
-            CustomItemDecoration(8, 8, 16, 0)
-        )
+    private fun setupRecyclerView(context: Context) {
+        binding.recyclerView.apply {
+            adapter = myAdapter
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(
+                CustomItemDecoration(8, 8, 16, 0)
+            )
+        }
     }
 }

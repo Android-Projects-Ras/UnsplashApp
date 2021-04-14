@@ -5,52 +5,38 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import android.widget.Checkable
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.myapp.R
+import com.example.myapp.databinding.LikeButtonLayoutBinding
+import java.util.ArrayList
 
 
-class LikeButton(context: Context, attrs: AttributeSet?): CardView(context, attrs) {
+class LikeButton(context: Context, attrs: AttributeSet?): ConstraintLayout(context, attrs) {
 
-    /*private lateinit var rectF: RectF
-    private val path = Path()
-    private var cornerRadius = 15f*/
+    private var _binding: LikeButtonLayoutBinding? = null
+    private val binding get() = _binding!!
+
+    var likesTv: TextView
+    var buttonNameTv: TextView
+
+
 
     init {
-        inflate(context, R.layout.like_button_layout, this)
+        val view = inflate(context, R.layout.like_button_layout, this)
+        _binding = LikeButtonLayoutBinding.bind(view)
+        likesTv = binding.likesTv
+        buttonNameTv = binding.buttonNameTv
 
-        /*val ta = getContext().obtainStyledAttributes(attrs, R.styleable.RoundedRelativeLayout)
-        cornerRadius = ta.getFloat(R.styleable.RoundedRelativeLayout_cornerRadius, 15f)
-        ta.recycle()*/
     }
 
+    //private val likeTv = binding.likesTv
 
-
-    /*override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        rectF = RectF(0f, 0f, w.toFloat(), h.toFloat())
-        resetPath()
-    }
-
-    override fun draw(canvas: Canvas) {
-        val save = canvas.save()
-        canvas.clipPath(path)
-        super.draw(canvas)
-        canvas.restoreToCount(save)
-    }
-
-    override fun dispatchDraw(canvas: Canvas) {
-        val save = canvas.save()
-        canvas.clipPath(path)
-        super.dispatchDraw(canvas)
-        canvas.restoreToCount(save)
-    }
-
-    private fun resetPath() {
-        path.reset()
-        path.addRoundRect(rectF, cornerRadius, cornerRadius, Path.Direction.CW)
-        path.close()
+    /*fun setLikes(likes: Int) {
+        binding.likesTv.text = likes.toString()
     }*/
+
 
 }

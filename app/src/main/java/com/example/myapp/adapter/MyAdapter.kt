@@ -13,7 +13,8 @@ import com.example.myapp.models.UnsplashModel
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 
-class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     private var myList = emptyList<RowItemType>()
@@ -73,24 +74,21 @@ class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) : Recycl
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.imageView)
 
-            binding.likeButton.isSelected = !model.isLiked
-
-            //TODO: get access to likes_tv
-            //binding.likesTv.text = model.likesNumber.toString()
+            binding.likeButton.isSelected = model.isLiked
+            binding.likeButton.likesTv.text = model.likesNumber.toString()
+            val position = adapterPosition
 
             binding.likeButton.setOnClickListener {
-                if (!model.isLiked) {        //if image is liked
+                if (model.isLiked) {                      //if image is liked
+                    likeListener?.invoke(false, model.id)  //minus 1 like
                     binding.likeButton.isSelected = false
-                    model.isLiked = false            //?
-                    //find model by id?
-                    likeListener?.invoke(true, model.id)
+                    binding.likeButton.likesTv.text = model.likesNumber.toString()
 
                 } else {
-
+                    likeListener?.invoke(true, model.id)
                     binding.likeButton.isSelected = true
-                    model.isLiked = true
+                    binding.likeButton.likesTv.text = model.likesNumber.toString()
 
-                    likeListener?.invoke(false, model.id)
                 }
             }
         }

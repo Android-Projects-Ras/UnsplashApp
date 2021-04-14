@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/custom_button" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/button_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -34,11 +34,13 @@
         android:layout_height="30dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/cicle_background"
         android:gravity="center"
         android:text="0"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent" />
 

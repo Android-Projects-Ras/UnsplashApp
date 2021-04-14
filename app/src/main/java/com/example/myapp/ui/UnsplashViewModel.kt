@@ -37,12 +37,7 @@ class UnsplashViewModel(
 
         viewModelScope.launch(errorHandler) {
             withContext(Dispatchers.IO) {
-
-                //взять лайкнутый элемент из list
-                //изменить поля элемента isLiked & likesNumber
-                //записать обновленный list в listLiveData
                 val list = getPhotosUseCase.execute()
-
                 if (list.isNullOrEmpty()) {
                     errorLiveData.value = "List is empty"
                 } else {
@@ -57,8 +52,54 @@ class UnsplashViewModel(
     }
 
     //fun from MainActivity
-    fun updateValue(status: Boolean, likedElementId: String) {
-        //listLiveData.value =
+    fun updateValue(status: Boolean, likedModelId: String) {
+        viewModelScope.launch {
+
+            val list = listLiveData.value
+            val unsplashModelList = toUnsplashModelList(list)
+            val rowItemList = changeLikedModel(unsplashModelList, status, likedModelId)
+
+            listLiveData.postValue(rowItemList)
+        }
+    }
+
+    private fun toUnsplashModelList(list: List<RowItemType>?): List<UnsplashModel> {
+        val unsplashList = ArrayList<UnsplashModel>()
+        list?.forEach {
+            when (it) {
+                is UnsplashModel -> unsplashList.add(it)
+                is TextItem -> return@forEach
+            }
+        }
+        return unsplashList
+    }
+
+    private fun changeLikedModel(
+        unsplashModelList: List<UnsplashModel>,
+        status: Boolean,
+        likedModelId: String
+    ): List<RowItemType> {
+
+        val rowItemList = ArrayList<RowItemType>()
+
+        unsplashModelList.forEach { unsplashModel ->
+            if (unsplashModel.id == likedModelId) {
+                if (status) {
+                    val likes = unsplashModel.likesNumber+1
+                    unsplashModel.likesNumber = likes   //unsplashModel.likesNumber.plus(1) doesn't work
+                    unsplashModel.isLiked = status
+                } else {
+                    val likes = unsplashModel.likesNumber-1
+                    unsplashModel.likesNumber = likes
+                    unsplashModel.isLiked = status
+                }
+                rowItemList.add(unsplashModel)
+            } else {
+                rowItemList.add(unsplashModel)
+
+            }
+        }
+        return rowItemList
     }
 
 
