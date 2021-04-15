@@ -13,13 +13,13 @@ import com.example.myapp.R
 import com.example.myapp.databinding.LikeButtonLayoutBinding
 import java.util.ArrayList
 
-
+//todo: вынеси в отдельный пакет view с наименованием LikeButtonView
 class LikeButton(context: Context, attrs: AttributeSet?): ConstraintLayout(context, attrs) {
 
     private var _binding: LikeButtonLayoutBinding? = null
     private val binding get() = _binding!!
 
-    var likesTv: TextView
+    var likesTv: TextView //  todo: не далай поля на вьюхи паблик. Создай паблик методы, которые будут взаимодействовать с этими вью
     var buttonNameTv: TextView
 
 
@@ -34,7 +34,7 @@ class LikeButton(context: Context, attrs: AttributeSet?): ConstraintLayout(conte
 
     //private val likeTv = binding.likesTv
 
-    /*fun setLikes(likes: Int) {
+    /*fun setLikes(likes: Int) {  todo: такой вариант норм
         binding.likesTv.text = likes.toString()
     }*/
 

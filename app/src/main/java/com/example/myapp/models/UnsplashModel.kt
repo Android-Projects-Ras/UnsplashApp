@@ -7,6 +7,6 @@ data class UnsplashModel(
     val description: String,
     val url: String,
     var likesNumber: Int,
-    var isLiked: Boolean
+    var isLiked: Boolean // todo: не делай поля var. у дата классов есть метод copy, который создаёт копию объекта и там в конструктор ты можешь передать новые значения
 
 ): RowItemType

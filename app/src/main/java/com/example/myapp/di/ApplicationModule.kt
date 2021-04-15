@@ -20,7 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val useCaseModule = module {
-    single<GetPhotosUseCase> {
+    single<GetPhotosUseCase> { // todo: usecases создаются как factory
         GetPhotosUseCaseImpl(get(), get(), get())
     }
 }

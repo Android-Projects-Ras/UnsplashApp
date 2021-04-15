@@ -52,14 +52,14 @@ class UnsplashViewModel(
     }
 
     //fun from MainActivity
-    fun updateValue(status: Boolean, likedModelId: String) {
+    fun updateValue(status: Boolean, likedModelId: String) { // todo: status нечитабельно, используй isLiked например
         viewModelScope.launch {
 
             val list = listLiveData.value
-            val unsplashModelList = toUnsplashModelList(list)
+            val unsplashModelList = toUnsplashModelList(list) //  todo: можно заменить весь метод на использование екстеншина для коллекций filter или метод filterIsInstance() 
             val rowItemList = changeLikedModel(unsplashModelList, status, likedModelId)
 
-            listLiveData.postValue(rowItemList)
+            listLiveData.postValue(rowItemList) //todo: postValue тут не нужен, launch по дефолту запускает выполнение в основном потоке
         }
     }
 
@@ -74,6 +74,14 @@ class UnsplashViewModel(
         return unsplashList
     }
 
+    // todo: весь метод можно заменить на екстешн map. Вот так
+    /*unsplashModelList.map {
+        if (it.id == likedModelId) {
+            it.copy(likesNumber = newLikeNumber, isLiked = newLikedValue)
+        } else {
+            it
+        }
+    }*/
     private fun changeLikedModel(
         unsplashModelList: List<UnsplashModel>,
         status: Boolean,
@@ -85,7 +93,7 @@ class UnsplashViewModel(
         unsplashModelList.forEach { unsplashModel ->
             if (unsplashModel.id == likedModelId) {
                 if (status) {
-                    val likes = unsplashModel.likesNumber+1
+                    val likes = unsplashModel.likesNumber+1 //  todo: вокруг арифметических знаков ставятся пробелы. нажимай контро+шифт+L для форматирования
                     unsplashModel.likesNumber = likes   //unsplashModel.likesNumber.plus(1) doesn't work
                     unsplashModel.isLiked = status
                 } else {

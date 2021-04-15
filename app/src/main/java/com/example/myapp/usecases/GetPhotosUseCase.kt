@@ -77,7 +77,7 @@ class GetPhotosUseCaseImpl(
         return entityListWithURIs
     }
 
-    fun addLike(list: List<RowItemType>, likedElementId: String): List<RowItemType> {
+    fun addLike(list: List<RowItemType>, likedElementId: String): List<RowItemType> { // todo: ?
         list.forEach {
             val element = it as UnsplashModel
             if (element.id == likedElementId) {

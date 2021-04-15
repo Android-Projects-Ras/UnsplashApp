@@ -15,7 +15,7 @@ import com.example.myapp.adapter.RowItemType
 import com.example.myapp.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
+// todo: просмотри везде форматирование, лишние отступы поубирай. Это очень важно в написании
 class MainActivity : AppCompatActivity() {
 
 
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
 
         viewModel.listLiveData.observe(this, Observer {
-            binding.progressBar.isVisible = true
+            binding.progressBar.isVisible = true //  todo: создай отдельную лайвдату для прослушивания видимости прогресс бара. И прогресс бар должен появляться когда запрос начинается и скрываться, когда выполняется успешно либо в случае возникновения ошибки
             it?.let {
 
                 myAdapter.setData(it)
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun setupRecyclerView(context: Context) {
+    private fun setupRecyclerView(context: Context) { //todo: зачем передавать контекст, если он итак доступен внутри метода
         binding.recyclerView.apply {
             adapter = myAdapter
             layoutManager = LinearLayoutManager(context)
