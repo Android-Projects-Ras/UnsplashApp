@@ -5,47 +5,47 @@
     android:id="@+id/constr_layout_like_button"
     android:layout_width="100dp"
     android:layout_height="50dp"
-    android:background="@drawable/rounded_background">
+    android:background="@drawable/btn_rounded_background">
 
     <ImageView
-        android:id="@+id/heart_iv"
+        android:id="@+id/ivHeart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/custom_button" />
+        app:srcCompat="@drawable/btn_heart_state" />
 
     <!--   todo: tools:text="Like" будет отображать текст только в превью моде, что в данном случае и нужно -->
     <!--   todo: удобное сокращение id типвьюОписание, например tvLike, tvLikeCount, ivHeart-->
     <!--   todo: xml файл строются по принципу что_описание или что_где_описание fragment_main, item_main_image, view_like_button-->
     <!--   todo: для drawable такой же принцип, если что то общее, то раздел где пропускается, например ic_heart_read или ic_main_heard_red-->
     <TextView
-        android:id="@+id/button_name_tv"
+        android:id="@+id/tvButtonName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Like"
+        tools:text="Like"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/heart_iv"
+        app:layout_constraintStart_toEndOf="@+id/ivHeart"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/likes_tv"
+        android:id="@+id/tvLikes"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/cicle_background"
+        android:background="@drawable/likes_cicle_background"
         android:gravity="center"
-        android:text="0"
+        tools:text="0"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintStart_toEndOf="@+id/tvButtonName"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

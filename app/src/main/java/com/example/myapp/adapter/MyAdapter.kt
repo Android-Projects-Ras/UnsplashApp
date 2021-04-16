@@ -16,7 +16,6 @@ const val VIEW_TYPE_TEXT = 2
 class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-
     private var myList = emptyList<RowItemType>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -59,14 +58,12 @@ class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) :
         fun bind(textItem: TextItem) {
             binding.textView.text = textItem.title   //different text
         }
-
     }
 
     inner class UnsplashImageViewHolder(private val binding: RowItemImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: UnsplashModel) {
-
 
             Glide.with(binding.root)
                 .load(model.url)
@@ -75,19 +72,18 @@ class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) :
                 .into(binding.imageView)
 
             binding.likeButton.isSelected = model.isLiked
-            binding.likeButton.likesTv.text = model.likesNumber.toString()
-            val position = adapterPosition
+            binding.likeButton.setLikes(model.likesNumber)
 
             binding.likeButton.setOnClickListener {
                 if (model.isLiked) {                      //if image is liked
                     likeListener?.invoke(false, model.id)  //minus 1 like
                     binding.likeButton.isSelected = false
-                    binding.likeButton.likesTv.text = model.likesNumber.toString()
+                    binding.likeButton.setLikes(model.likesNumber)
 
                 } else {
                     likeListener?.invoke(true, model.id)
                     binding.likeButton.isSelected = true
-                    binding.likeButton.likesTv.text = model.likesNumber.toString()
+                    binding.likeButton.setLikes(model.likesNumber)
 
                 }
             }
@@ -101,8 +97,4 @@ class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) :
             else -> VIEW_TYPE_IMAGE
         }
     }
-
-    /*interface OnLikeClickListener {
-        fun onLikeClick()
-    }*/
 }

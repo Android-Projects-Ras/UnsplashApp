@@ -1,49 +1,47 @@
 package com.example.myapp.ui
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
-import com.example.myapp.adapter.RowItemType
 import com.example.myapp.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// todo: просмотри везде форматирование, лишние отступы поубирай. Это очень важно в написании
 class MainActivity : AppCompatActivity() {
-
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModel<UnsplashViewModel>()
-    private val myAdapter by lazy { MyAdapter(
-        likeListener = fun(status: Boolean, id: String) {
-            viewModel.updateValue(status, id)  //update domain model in ViewModel
-        }
-    )}
-    //private val unsplashRepository = get<UnsplashRepository>()
+    private val myAdapter by lazy {
+        MyAdapter(
+            likeListener = fun(_isSelected: Boolean, id: String) {
+                viewModel.updateValue(_isSelected, id)  //update domain model in ViewModel
+            }
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupRecyclerView(this)
+        setupRecyclerView()
 
-
+        //for images
         viewModel.listLiveData.observe(this, Observer {
-            binding.progressBar.isVisible = true //  todo: создай отдельную лайвдату для прослушивания видимости прогресс бара. И прогресс бар должен появляться когда запрос начинается и скрываться, когда выполняется успешно либо в случае возникновения ошибки
             it?.let {
-
                 myAdapter.setData(it)
             }
-            binding.progressBar.isVisible = false
         })
 
+        //for progress bar
+        viewModel.isLoading.observe(this, Observer {
+            binding.progressBar.isVisible = it
+        })
+
+        //for error
         viewModel.errorLiveData.observe(this, Observer {
             if (it != null) {
                 binding.recyclerView.isVisible = false
@@ -53,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun setupRecyclerView(context: Context) { //todo: зачем передавать контекст, если он итак доступен внутри метода
+    private fun setupRecyclerView() {
         binding.recyclerView.apply {
             adapter = myAdapter
             layoutManager = LinearLayoutManager(context)

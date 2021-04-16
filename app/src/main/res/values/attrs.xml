@@ -1,7 +1,0 @@
-<resources>
-
-    <declare-styleable name="LikeButton">
-        <attr name="drawableCenter" format="integer" />
-
-    </declare-styleable>
-</resources>

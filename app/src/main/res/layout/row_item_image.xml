@@ -7,14 +7,14 @@
     app:cardCornerRadius="16dp">
 
     <ImageView
-        android:id="@+id/image_view"
+        android:id="@+id/ivMainItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <com.example.myapp.ui.LikeButton
-        android:id="@+id/like_button"
+    <com.example.myapp.view.LikeButtonView
+        android:id="@+id/viewLikeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

@@ -1,16 +1,15 @@
 package com.example.myapp.usecases
 
 import android.content.Context
-import android.widget.Toast
 import com.example.myapp.adapter.RowItemType
-import com.example.myapp.adapter.TextItem
 import com.example.myapp.data.cache.InternalCache
 import com.example.myapp.mappers.toUnsplashModel
 import com.example.myapp.mappers.toUnsplashModelEntity
 import com.example.myapp.models.UnsplashModel
 import com.example.myapp.repository.UnsplashRepository
-import kotlinx.coroutines.*
-import java.util.ArrayList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.util.*
 
 interface GetPhotosUseCase {
     suspend fun execute(): List<RowItemType>
@@ -26,12 +25,10 @@ class GetPhotosUseCaseImpl(
         // get list of images
         val imagesList = getUnsplashImages()
         return imagesList
-
     }
 
     private suspend fun getUnsplashImages(): List<RowItemType> {
         try {
-
 
             val resp = repository.getUnsplashImage()
             val resultList = ArrayList<RowItemType>(resp)
@@ -48,7 +45,6 @@ class GetPhotosUseCaseImpl(
             //errorLiveData.value = e.message
             return getCachedUnsplashImages()
         }
-
     }
 
     suspend fun getCachedUnsplashImages(): List<RowItemType> {
@@ -56,9 +52,7 @@ class GetPhotosUseCaseImpl(
         return ArrayList<RowItemType>(cachedUnsplashImagesURIs.map {
             it.toUnsplashModel()
         })
-
     }
-
 
     private suspend fun addAllModelsToDb(resp: List<UnsplashModel>) {
         repository.insertAllImages(resp.map {
@@ -69,22 +63,11 @@ class GetPhotosUseCaseImpl(
     private suspend fun cachingImages(modelsList: List<UnsplashModel>): List<UnsplashModel> {
         val entityListWithURIs = ArrayList<UnsplashModel>()
         modelsList.forEach { unsplashModel ->
-            val imageBitmap = unsplashModel.url?.let { internalCache.loadBitmap(it) }
+            val imageBitmap = unsplashModel.url.let { internalCache.loadBitmap(it) }
             val fileURI = imageBitmap?.let { internalCache.saveBitmap(context, it) }
             val newUnsplash = unsplashModel.copy(url = fileURI.toString())
             entityListWithURIs.add(newUnsplash)
         }
         return entityListWithURIs
     }
-
-    fun addLike(list: List<RowItemType>, likedElementId: String): List<RowItemType> { // todo: ?
-        list.forEach {
-            val element = it as UnsplashModel
-            if (element.id == likedElementId) {
-                element.likesNumber.plus(1)
-            }
-        }
-        return list
-    }
-
 }
