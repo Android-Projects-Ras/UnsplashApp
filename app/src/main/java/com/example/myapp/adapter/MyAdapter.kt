@@ -56,7 +56,7 @@ class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(textItem: TextItem) {
-            binding.textView.text = textItem.title   //different text
+            binding.tvItemText.text = textItem.title   //different text
         }
     }
 
@@ -69,21 +69,21 @@ class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) :
                 .load(model.url)
                 //.placeholder(R.drawable.glide_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(binding.imageView)
+                .into(binding.ivMainItem)
 
-            binding.likeButton.isSelected = model.isLiked
-            binding.likeButton.setLikes(model.likesNumber)
+            binding.viewLikeButton.isSelected = model.isLiked
+            binding.viewLikeButton.setLikes(model.likesNumber)
 
-            binding.likeButton.setOnClickListener {
+            binding.viewLikeButton.setOnClickListener {
                 if (model.isLiked) {                      //if image is liked
                     likeListener?.invoke(false, model.id)  //minus 1 like
-                    binding.likeButton.isSelected = false
-                    binding.likeButton.setLikes(model.likesNumber)
+                    binding.viewLikeButton.isSelected = false
+                    binding.viewLikeButton.setLikes(model.likesNumber)
 
                 } else {
                     likeListener?.invoke(true, model.id)
-                    binding.likeButton.isSelected = true
-                    binding.likeButton.setLikes(model.likesNumber)
+                    binding.viewLikeButton.isSelected = true
+                    binding.viewLikeButton.setLikes(model.likesNumber)
 
                 }
             }

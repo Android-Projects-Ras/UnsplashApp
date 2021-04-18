@@ -38,21 +38,21 @@ class MainActivity : AppCompatActivity() {
 
         //for progress bar
         viewModel.isLoading.observe(this, Observer {
-            binding.progressBar.isVisible = it
+            binding.pbMain.isVisible = it
         })
 
         //for error
         viewModel.errorLiveData.observe(this, Observer {
             if (it != null) {
-                binding.recyclerView.isVisible = false
-                binding.textView.isVisible = true
+                binding.rvMainImages.isVisible = false
+                binding.tvItemText.isVisible = true
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     private fun setupRecyclerView() {
-        binding.recyclerView.apply {
+        binding.rvMainImages.apply {
             adapter = myAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(
