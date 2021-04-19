@@ -9,12 +9,10 @@ import com.example.myapp.databinding.RowItemImageBinding
 import com.example.myapp.databinding.RowItemTextBinding
 import com.example.myapp.models.UnsplashModel
 
-
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 
-//todo: почему likeListener нулабл, если ты его гарантированно в конструктор передаёшь?
-class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) :
+class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var myList = emptyList<RowItemType>()
@@ -76,22 +74,7 @@ class MyAdapter(private val likeListener: ((Boolean, String) -> Unit)?) :
             binding.viewLikeButton.setLikes(model.likesNumber)
 
             binding.viewLikeButton.setOnClickListener {
-                //todo: проверка на isLiked должна быть во вьюмодели, тут в клик слушателе только вызов likeListener колбека
-                if (model.isLiked) {                      //if image is liked
-                    likeListener?.invoke(false, model.id)  //minus 1 like
-
-                    /*todo: этот код ненужен. Данные обновятся после того, как ты адаптеру задашь новый список и он перебиндится
-                    binding.viewLikeButton.isSelected = false
-                    binding.viewLikeButton.setLikes(model.likesNumber)*/
-                    binding.viewLikeButton.isSelected = false
-                    binding.viewLikeButton.setLikes(model.likesNumber)
-
-                } else {
-                    likeListener?.invoke(true, model.id)
-                    binding.viewLikeButton.isSelected = true
-                    binding.viewLikeButton.setLikes(model.likesNumber)
-
-                }
+                likeListener(model)
             }
         }
     }

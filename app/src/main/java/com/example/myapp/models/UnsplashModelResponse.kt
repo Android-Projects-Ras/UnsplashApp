@@ -1,12 +1,6 @@
 package com.example.myapp.models
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
-import com.example.myapp.adapter.RowItemType
 import com.google.gson.annotations.SerializedName
-
 
 data class UnsplashModelResponse(
     @SerializedName("alt_description")

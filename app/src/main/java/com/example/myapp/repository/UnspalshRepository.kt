@@ -21,8 +21,6 @@ interface UnsplashRepository {
     suspend fun clearCacheAndRoom()
 
     suspend fun getFileURIs(): List<String>
-
-
 }
 
 class UnsplashRepositoryImpl(
@@ -32,14 +30,16 @@ class UnsplashRepositoryImpl(
 
 ) : UnsplashRepository {
 
-
     private val path: String = context.cacheDir.path
 
     override suspend fun getUnsplashImage(): List<UnsplashModel> {
         //map to UnsplashModel
         return api.searchImages().map {
-            val randomedLikes = Random.nextInt(1, 10)
-            val randomedState = Random.nextBoolean()
+            val randomedLikes = Random.nextInt(0, 10)
+            var randomedState = Random.nextBoolean()
+            if (randomedLikes == 0) {
+                randomedState = false
+            }
             it.toUnsplashModel().copy(likesNumber = randomedLikes, isLiked = randomedState)
         }
     }

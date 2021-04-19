@@ -3,6 +3,7 @@ package com.example.myapp.view
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.example.myapp.R
 import com.example.myapp.databinding.ViewLikeButtonBinding
 
@@ -17,9 +18,12 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
     }
 
     fun setLikes(likes: Int) {
-        binding.tvLikes.text = likes.toString()
+        if (likes == 0) {
+            binding.tvLikes.isVisible = false
+        } else {
+            binding.tvLikes.isVisible = true
+            binding.tvLikes.text = likes.toString()
+        }
     }
-
-    //todo: нет проверки, что если лайков 0 будет, то прятать вьюху с количеством лайков, как договаривались
-
 }
+

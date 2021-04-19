@@ -38,16 +38,14 @@ class InternalCacheImpl : InternalCache {
         }
     }
 
-    override suspend fun saveBitmap(context: Context, bitmap: Bitmap, name: String?) =
-        withContext(Dispatchers.IO) {
-
-            val fileName = "${name ?: UUID.randomUUID().toString().replace("-", "")}.png"
-            val file = File(context.cacheDir.path /*+ "/image_manager_disk_cache"*/, fileName)
-            //file.mkdir()
-            //creates outputstream to write the file
-            FileOutputStream(file).use {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)//write to outputstream
-            }
-            file.toUri()
+    override suspend fun saveBitmap(context: Context, bitmap: Bitmap, name: String?): Uri {
+        val fileName = "${name ?: UUID.randomUUID().toString().replace("-", "")}.png"
+        val file = File(context.cacheDir.path, fileName)
+        //file.mkdir()
+        //creates outputstream to write the file
+        FileOutputStream(file).use {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)//write to outputstream
         }
+        return file.toUri()
+    }
 }

@@ -42,12 +42,11 @@ class GetPhotosUseCaseImpl(
 
         } catch (e: Exception) {
             e.printStackTrace()
-            //errorLiveData.value = e.message
             return getCachedUnsplashImages()
         }
     }
 
-    suspend fun getCachedUnsplashImages(): List<RowItemType> {
+    private suspend fun getCachedUnsplashImages(): List<RowItemType> {
         val cachedUnsplashImagesURIs = repository.getAllModels()
         return ArrayList<RowItemType>(cachedUnsplashImagesURIs.map {
             it.toUnsplashModel()

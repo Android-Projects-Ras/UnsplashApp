@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by viewModel<UnsplashViewModel>()
     private val myAdapter by lazy {
         MyAdapter(
-            likeListener = fun(_isSelected: Boolean, id: String) { //todo: необязательно fun создавать, достаточно фигурный скобки открыть после равно
-                viewModel.updateValue(_isSelected, id)  //update domain model in ViewModel
+            likeListener = { model ->
+                viewModel.updateValue(model)  //update domain model in ViewModel
             }
         )
     }
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         //for progress bar
-        viewModel.isLoading.observe(this, Observer {
+        viewModel.isLoadingLiveData.observe(this, Observer {
             binding.pbMain.isVisible = it
         })
 

@@ -28,8 +28,7 @@ fun UnsplashModel.toUnsplashModelEntity(): UnsplashModelEntity {   //  domain to
     return UnsplashModelEntity(
         id = this.id,
         description = this.description,
-        url = this.url,
-        cachedImagePath = null
+        url = this.url
     )
 }
 
