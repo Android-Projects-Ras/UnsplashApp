@@ -20,5 +20,6 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         binding.tvLikes.text = likes.toString()
     }
 
+    //todo: нет проверки, что если лайков 0 будет, то прятать вьюху с количеством лайков, как договаривались
 
 }
