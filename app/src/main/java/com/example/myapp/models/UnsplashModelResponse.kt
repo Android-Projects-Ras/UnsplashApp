@@ -2,6 +2,7 @@ package com.example.myapp.models
 
 import com.google.gson.annotations.SerializedName
 
+// todo: собери в один файл классы, связанные с ответом сервера UnsplashModelResponse, чтобы не было так много файлов. На больших проектах это очень сократит количество файлов
 data class UnsplashModelResponse(
     @SerializedName("alt_description")
     val altDescription: String?,
