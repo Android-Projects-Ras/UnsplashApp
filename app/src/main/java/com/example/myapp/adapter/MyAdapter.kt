@@ -17,8 +17,6 @@ const val VIEW_TYPE_TEXT = 2
 class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
     ListAdapter<RowItemType, RecyclerView.ViewHolder>(imageDiffCallback) {
 
-    private var myList = emptyList<RowItemType>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_IMAGE -> UnsplashImageViewHolder(
@@ -40,23 +38,17 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val currentItem = getItem(position)
         when (holder) {
-            is UnsplashImageViewHolder -> holder.bind(myList[position] as UnsplashModel)
-            is UnsplashTextHolder -> holder.bind(myList[position] as TextItem)
+            is UnsplashImageViewHolder -> holder.bind(currentItem as UnsplashModel)
+            is UnsplashTextHolder -> holder.bind(currentItem as TextItem)
         }
     }
-
-    override fun getItemCount() = myList.size
-
-    /*fun setData(newList: List<RowItemType>) {
-        myList = newList
-        notifyDataSetChanged()
-    }*/
 
     inner class UnsplashTextHolder(private val binding: RowItemTextBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(textItem: TextItem) {
+        fun bind(textItem: RowItemType) {
             binding.tvItemText.text = textItem.title   //different text
         }
     }
@@ -64,7 +56,7 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
     inner class UnsplashImageViewHolder(private val binding: RowItemImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(model: UnsplashModel) {
+        fun bind(model: RowItemType/*UnsplashModel*/) {
 
             Glide.with(binding.root)
                 .load(model.url)
@@ -76,13 +68,13 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
             binding.viewLikeButton.setLikes(model.likesNumber)
 
             binding.viewLikeButton.setOnClickListener {
-                likeListener(model)
+                likeListener(model as UnsplashModel)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (myList[position]) {
+        return when (getItem(position)) {
             is TextItem -> VIEW_TYPE_TEXT
             is UnsplashModel -> VIEW_TYPE_IMAGE
             else -> VIEW_TYPE_IMAGE
@@ -91,12 +83,14 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
 
     companion object {
         val imageDiffCallback = object : DiffUtil.ItemCallback<RowItemType>() {
+
             override fun areItemsTheSame(oldItem: RowItemType, newItem: RowItemType): Boolean {
-                return (oldItem as UnsplashModel).id == (newItem as UnsplashModel).id
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: RowItemType, newItem: RowItemType): Boolean {
-                return (oldItem as UnsplashModel).url == (newItem as UnsplashModel).url
+                return oldItem.url == newItem.url
+                        && oldItem.likesNumber == newItem.likesNumber
             }
         }
     }

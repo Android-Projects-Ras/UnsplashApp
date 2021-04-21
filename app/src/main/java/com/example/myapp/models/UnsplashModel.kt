@@ -3,10 +3,10 @@ package com.example.myapp.models
 import com.example.myapp.adapter.RowItemType
 
 data class UnsplashModel(
-    val id: String,
+    override val id: String,
     val description: String,
-    val url: String,
-    val likesNumber: Int,
-    val isLiked: Boolean // todo: не делай поля var. у дата классов есть метод copy, который создаёт копию объекта и там в конструктор ты можешь передать новые значения
-
-): RowItemType
+    override val url: String,
+    override val likesNumber: Int,
+    override val isLiked: Boolean,
+    override val title: String = ""
+) : RowItemType
