@@ -2,6 +2,8 @@ package com.example.myapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -13,7 +15,7 @@ const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 
 class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    ListAdapter<RowItemType, RecyclerView.ViewHolder>(imageDiffCallback) {
 
     private var myList = emptyList<RowItemType>()
 
@@ -46,10 +48,10 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
 
     override fun getItemCount() = myList.size
 
-    fun setData(newList: List<RowItemType>) {
+    /*fun setData(newList: List<RowItemType>) {
         myList = newList
         notifyDataSetChanged()
-    }
+    }*/
 
     inner class UnsplashTextHolder(private val binding: RowItemTextBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -84,6 +86,18 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
             is TextItem -> VIEW_TYPE_TEXT
             is UnsplashModel -> VIEW_TYPE_IMAGE
             else -> VIEW_TYPE_IMAGE
+        }
+    }
+
+    companion object {
+        val imageDiffCallback = object : DiffUtil.ItemCallback<RowItemType>() {
+            override fun areItemsTheSame(oldItem: RowItemType, newItem: RowItemType): Boolean {
+                return (oldItem as UnsplashModel).id == (newItem as UnsplashModel).id
+            }
+
+            override fun areContentsTheSame(oldItem: RowItemType, newItem: RowItemType): Boolean {
+                return (oldItem as UnsplashModel).url == (newItem as UnsplashModel).url
+            }
         }
     }
 }

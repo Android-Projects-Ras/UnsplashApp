@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.databinding.ActivityMainBinding
+import com.example.myapp.models.UnsplashModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         //for images
         viewModel.listLiveData.observe(this, Observer {
             it?.let {
-                myAdapter.setData(it)
+                myAdapter.submitList(it)
             }
         })
 
