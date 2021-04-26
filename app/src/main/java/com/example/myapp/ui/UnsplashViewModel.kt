@@ -55,7 +55,7 @@ class UnsplashViewModel(
         viewModelScope.launch {
 
             val list = listLiveData.value ?: return@launch
-            val unsplashModelList = list.filterIsInstance<UnsplashModel>()
+            val unsplashModelList = list.filterIsInstance<UnsplashModel>() //todo: вот тут я тебе плохо посоветовал, давай улучшим. можно для всего списка вызвать map и проверять каждый айтем, к какому классу он принадлежит. Тогда тебе заново не придётся добавлять текст айтемы, потому что мы только обновим нужные нам.
             val rowItemList: List<RowItemType> = unsplashModelList.map {
                 if (it.id == model.id) {
                     changeModel(it)
@@ -63,7 +63,7 @@ class UnsplashViewModel(
                     it
                 }
             }
-            val listImages = ArrayList<RowItemType>(rowItemList).apply {
+            val listImages = ArrayList<RowItemType>(rowItemList).apply { //todo: это будет не нужно
                 add(0, TextItem("Hello"))
                 add(TextItem("Bye"))
             }

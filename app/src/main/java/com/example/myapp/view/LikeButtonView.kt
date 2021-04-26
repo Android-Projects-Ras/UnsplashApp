@@ -7,8 +7,11 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.util.AttributeSet
+import android.view.View
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.animation.addListener
+import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.isVisible
 import com.example.myapp.R
@@ -34,6 +37,7 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         }
     }
 
+    //todo: не нужно отдельно задавать значение и анимировать его, делай это всё через один метод. Можешь добавить просто параметр в метод типа animate: Boolean
     fun animateLike(isLiked: Boolean) {
 
         Toast.makeText(context, "animateLike", Toast.LENGTH_SHORT).show()
@@ -41,6 +45,7 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
             target = binding.ivHeart
             duration = 500
             setPropertyName("scaleX")
+            // propertyName = View.SCALE_X todo: лучше использовать константы
             setFloatValues(0.8f, 1.1f, 0.9f, 1.0f)
         }
 
@@ -48,12 +53,14 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
             target = binding.ivHeart
             duration = 500
             setPropertyName("scaleY")
+            // propertyName = View.SCALE_Y todo: лучше использовать константы
             setFloatValues(0.8f, 1.1f, 0.9f, 1.0f)
         }
 
         AnimatorSet().apply {
             play(animX).with(animY)
             //start()
+            // addListener(onStart = {}, onEnd = {}) todo: можно использовать этот екстеншн и не переопределять ненужные тебе методы
             addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator?) {
                     binding.ivHeart.setImageResource(

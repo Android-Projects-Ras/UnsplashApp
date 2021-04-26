@@ -22,7 +22,7 @@ class UnsplashDiffCallback(
         val newItem = newList[newItemPosition]
 
         return when (oldItem) {
-            is UnsplashModel -> oldItem.id == (newItem as UnsplashModel).id
+            is UnsplashModel -> oldItem.id == (newItem as UnsplashModel).id //todo: новый айтем может быть вовсе не UnsplashModel, если ты например его во вью модели заменишь на другой тип. И будет краш, нужно делать проверку на тип
             else -> true
         }
     }
@@ -32,13 +32,13 @@ class UnsplashDiffCallback(
         val newItem = newList[newItemPosition]
 
         return when (oldItem) {
-            is UnsplashModel -> oldItem.likesNumber == (newItem as UnsplashModel).likesNumber
+            is UnsplashModel -> oldItem.likesNumber == (newItem as UnsplashModel).likesNumber //todo: новый айтем может быть вовсе не UnsplashModel, если ты например его во вью модели заменишь на другой тип. И будет краш, нужно делать проверку на тип
             else -> true
         }
     }
 
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        val oldItem = oldList[oldItemPosition] as UnsplashModel
+        val oldItem = oldList[oldItemPosition] as UnsplashModel //todo: так делать не стоит, потому что тут же может потом быть не только UnsplashModel и придётся переписывать. Делай проверку типов как в предыдущих методах
         val newItem = newList[newItemPosition] as UnsplashModel
         val isLikesNumEquals = oldItem.likesNumber == newItem.likesNumber
         if (isLikesNumEquals.not()) {
