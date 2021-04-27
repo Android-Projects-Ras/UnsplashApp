@@ -13,9 +13,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class UnsplashViewModel(
-
     private val getPhotosUseCase: GetPhotosUseCase
-
 ) : ViewModel() {
 
     val listLiveData = MutableLiveData<List<RowItemType>>()
@@ -55,19 +53,17 @@ class UnsplashViewModel(
         viewModelScope.launch {
 
             val list = listLiveData.value ?: return@launch
-            val unsplashModelList = list.filterIsInstance<UnsplashModel>() //todo: вот тут я тебе плохо посоветовал, давай улучшим. можно для всего списка вызвать map и проверять каждый айтем, к какому классу он принадлежит. Тогда тебе заново не придётся добавлять текст айтемы, потому что мы только обновим нужные нам.
-            val rowItemList: List<RowItemType> = unsplashModelList.map {
-                if (it.id == model.id) {
-                    changeModel(it)
-                } else {
-                    it
+            val rowItemList: List<RowItemType> = list.map {
+                when (it) {
+                    is UnsplashModel -> if (it.id == model.id) {
+                        changeModel(it)
+                    } else {
+                        it
+                    }
+                    else -> it
                 }
             }
-            val listImages = ArrayList<RowItemType>(rowItemList).apply { //todo: это будет не нужно
-                add(0, TextItem("Hello"))
-                add(TextItem("Bye"))
-            }
-            listLiveData.value = listImages
+            listLiveData.value = rowItemList
         }
     }
 

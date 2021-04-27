@@ -3,6 +3,7 @@ package com.example.myapp.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -16,9 +17,7 @@ const val VIEW_TYPE_TEXT = 2
 const val UPDATE_LIKE = 3
 
 class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>(/*imageDiffCallback*/) {
-
-    private var myList: List<RowItemType> = emptyList()
+    ListAdapter<RowItemType, RecyclerView.ViewHolder>(UnsplashDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -40,36 +39,28 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
         }
     }
 
-    override fun getItemCount(): Int {
-        return myList.size
-    }
-
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
         payloads: MutableList<Any>
     ) {
-        //val currentItem = getItem(position)
+        val currentItem = getItem(position)
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position)
         } else {
             payloads.forEach {
                 when (it as Int) {
-                    UPDATE_LIKE -> (holder as UnsplashImageViewHolder).updateLike(myList[position] as UnsplashModel)
+                    UPDATE_LIKE -> (holder as UnsplashImageViewHolder).updateLike(currentItem as UnsplashModel)
                 }
             }
         }
     }
 
-    /*fun updateLike(model: UnsplashModel) {
-
-    }*/
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        //val currentItem = getItem(position)
+        val currentItem = getItem(position)
         when (holder) {
-            is UnsplashImageViewHolder -> holder.bind(myList[position] as UnsplashModel)
-            is UnsplashTextHolder -> holder.bind(myList[position] as TextItem)
+            is UnsplashImageViewHolder -> holder.bind(currentItem as UnsplashModel)
+            is UnsplashTextHolder -> holder.bind(currentItem as TextItem)
         }
     }
 
@@ -96,30 +87,30 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
             binding.viewLikeButton.isSelected = model.isLiked
             binding.viewLikeButton.setLikes(model.likesNumber)
 
-
             binding.viewLikeButton.setOnClickListener {
                 likeListener(model)
             }
         }
 
+        //changed model
         fun updateLike(model: UnsplashModel) {
-            binding.viewLikeButton.animateLike(model.isLiked)
-            binding.viewLikeButton.setLikes(model.likesNumber)
+            binding.viewLikeButton.animateLike(model)
+            //binding.viewLikeButton.setAnimatedLikes(model.likesNumber)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (/*getItem(position)*/myList[position]) {
+        return when (getItem(position)) {
             is TextItem -> VIEW_TYPE_TEXT
             is UnsplashModel -> VIEW_TYPE_IMAGE
             else -> VIEW_TYPE_IMAGE
         }
     }
 
-    fun updateList(newList: List<RowItemType>) {
+    /*fun updateList(newList: List<RowItemType>) {
         val diffCallback = UnsplashDiffCallback(myList, newList)
         val diffResults = DiffUtil.calculateDiff(diffCallback)
         myList = newList
         diffResults.dispatchUpdatesTo(this)
-    }
+    }*/
 }

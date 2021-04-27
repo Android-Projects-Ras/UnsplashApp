@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         //for images
         viewModel.listLiveData.observe(this, Observer {
             it?.let {
-                myAdapter.updateList(it)
+                myAdapter.submitList(it)
             }
         })
 
