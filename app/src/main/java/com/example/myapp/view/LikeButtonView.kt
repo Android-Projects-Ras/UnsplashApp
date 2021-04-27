@@ -38,19 +38,22 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         val animX = ObjectAnimator().apply {
             target = binding.ivHeart
             duration = 500
-            setPropertyName("ScaleX") // todo: doesn't work View.SCALE_X.toString()
+            setPropertyName(View.SCALE_X.name)
+//            setPropertyName("ScaleX") // todo: doesn't work View.SCALE_X.toString()
             setFloatValues(0.8f, 1.1f, 0.9f, 1.0f)
         }
 
         val animY = ObjectAnimator().apply {
             target = binding.ivHeart
             duration = 500
-            setPropertyName("ScaleY") //View.SCALE_Y.toString()
+            setPropertyName(View.SCALE_Y.name) // todo: works good)
+//            setPropertyName("ScaleY") //View.SCALE_Y.toString()
             setFloatValues(0.8f, 1.1f, 0.9f, 1.0f)
         }
 
         AnimatorSet().apply {
-            play(animX).with(animY)
+            play(animX).with(animY) // can be replaced with playTogether()
+
             addListener(onStart = {
                 binding.ivHeart.setImageResource(
                     when (model.isLiked) {
@@ -65,6 +68,7 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         setAnimatedLikes(model.likesNumber)
     }
 
+    //todo: object animator и в onStart можешь задавать видимость вью
     private fun setAnimatedLikes(likesAmount: Int) {
         if (likesAmount == 0) {
             val fadeOutAnimation = AlphaAnimation(1.0f, 0f)

@@ -84,7 +84,7 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
                 .into(binding.ivMainItem)
 
             //binding.viewLikeButton.animateLike(model.isLiked)
-            binding.viewLikeButton.isSelected = model.isLiked
+            binding.viewLikeButton.isSelected = model.isLiked //todo: лишнее, не работает
             binding.viewLikeButton.setLikes(model.likesNumber)
 
             binding.viewLikeButton.setOnClickListener {
