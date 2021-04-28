@@ -33,26 +33,47 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         }
     }
 
-    fun animateLike(model: UnsplashModel/*animate: Boolean*/) {
+    fun setHeartImage(isLiked: Boolean) {
+        binding.ivHeart.setImageResource(
+            when (isLiked) {
+                true -> R.drawable.ic_heart_red
+                else -> R.drawable.ic_heart_white
+            }
+        )
+    }
+
+    fun animateLike(model: UnsplashModel) {
         Toast.makeText(context, "animateLike", Toast.LENGTH_SHORT).show()
         val animX = ObjectAnimator().apply {
             target = binding.ivHeart
             duration = 500
             setPropertyName(View.SCALE_X.name)
-//            setPropertyName("ScaleX") // todo: doesn't work View.SCALE_X.toString()
             setFloatValues(0.8f, 1.1f, 0.9f, 1.0f)
         }
 
         val animY = ObjectAnimator().apply {
             target = binding.ivHeart
             duration = 500
-            setPropertyName(View.SCALE_Y.name) // todo: works good)
-//            setPropertyName("ScaleY") //View.SCALE_Y.toString()
+            setPropertyName(View.SCALE_Y.name)
             setFloatValues(0.8f, 1.1f, 0.9f, 1.0f)
         }
 
+        val alphaFadeIn = ObjectAnimator().apply {
+            target = binding.tvLikes
+            duration = 500
+            setPropertyName(View.ALPHA.name)
+            setFloatValues(0f, 1.0f)
+        }
+
+        val alphaFadeOut = ObjectAnimator().apply {
+            target = binding.tvLikes
+            duration = 500
+            setPropertyName(View.ALPHA.name)
+            setFloatValues(1.0f, 0f)
+        }
+
         AnimatorSet().apply {
-            play(animX).with(animY) // can be replaced with playTogether()
+            playTogether(animX, animY, alphaFadeOut, alphaFadeIn)
 
             addListener(onStart = {
                 binding.ivHeart.setImageResource(
@@ -61,25 +82,14 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
                         else -> R.drawable.ic_heart_white
                     }
                 )
+                if (model.likesNumber == 0) {
+                    binding.tvLikes.isVisible = false  //?
+                } else {
+                    binding.tvLikes.isVisible = true
+                    binding.tvLikes.text = model.likesNumber.toString()
+                }
             })
             start()
-        }
-
-        setAnimatedLikes(model.likesNumber)
-    }
-
-    //todo: object animator и в onStart можешь задавать видимость вью
-    private fun setAnimatedLikes(likesAmount: Int) {
-        if (likesAmount == 0) {
-            val fadeOutAnimation = AlphaAnimation(1.0f, 0f)
-            fadeOutAnimation.duration = 500
-            binding.tvLikes.startAnimation(fadeOutAnimation)
-        } else {
-            //todo: tvLikes doesn't appear
-            binding.tvLikes.text = likesAmount.toString()
-            val fadeInAnimation = AlphaAnimation(0.5f, 1.0f)
-            fadeInAnimation.duration = 500
-            binding.tvLikes.startAnimation(fadeInAnimation)
         }
     }
 }

@@ -4,32 +4,33 @@ import androidx.recyclerview.widget.DiffUtil
 import com.example.myapp.models.UnsplashModel
 import java.util.ArrayList
 
-class UnsplashDiffCallback : DiffUtil.ItemCallback<RowItemType>() {
+object UnsplashDiffCallback : DiffUtil.ItemCallback<RowItemType>() {
 
     override fun areItemsTheSame(oldItem: RowItemType, newItem: RowItemType): Boolean {
-        if (oldItem is UnsplashModel && newItem is UnsplashModel) {
-            return oldItem.id == newItem.id /*&&
-                    oldItem.url == newItem.url*/
+        return when (oldItem) {
+            is UnsplashModel -> if (newItem is UnsplashModel) {
+                oldItem.id == newItem.id
+            } else false
+            else -> false
         }
-        return true
     }
 
     override fun areContentsTheSame(oldItem: RowItemType, newItem: RowItemType): Boolean {
-        if (oldItem is UnsplashModel && newItem is UnsplashModel) {
-            return oldItem.likesNumber == newItem.likesNumber
+        return when (oldItem) {
+            is UnsplashModel -> if (newItem is UnsplashModel) {
+                oldItem.likesNumber == newItem.likesNumber
+            } else false
+            else -> false
         }
-        return true
     }
 
     override fun getChangePayload(oldItem: RowItemType, newItem: RowItemType): Any? {
+        val payloads = mutableListOf<String>()
         if (oldItem is UnsplashModel && newItem is UnsplashModel) {
-            val comparison = oldItem.likesNumber == newItem.likesNumber
-            return when (comparison) {
-                true -> null
-                else -> UPDATE_LIKE
-            }
+            if (oldItem.likesNumber != newItem.likesNumber)
+                payloads.add(PAYLOAD_IMAGE_ITEM_LIKED)
         }
-        return null
+        return payloads.ifEmpty { null }
     }
 }
 

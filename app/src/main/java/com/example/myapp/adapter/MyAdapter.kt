@@ -2,7 +2,6 @@ package com.example.myapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,10 +13,10 @@ import com.example.myapp.models.UnsplashModel
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 
-const val UPDATE_LIKE = 3
+const val PAYLOAD_IMAGE_ITEM_LIKED = "PayloadImageItemLiked"
 
 class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
-    ListAdapter<RowItemType, RecyclerView.ViewHolder>(UnsplashDiffCallback()) {
+    ListAdapter<RowItemType, RecyclerView.ViewHolder>(UnsplashDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -48,9 +47,13 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position)
         } else {
-            payloads.forEach {
-                when (it as Int) {
-                    UPDATE_LIKE -> (holder as UnsplashImageViewHolder).updateLike(currentItem as UnsplashModel)
+            payloads.forEach { payload ->
+                (payload as? List<*>)?.forEach { key ->
+                    when (key) {
+                        PAYLOAD_IMAGE_ITEM_LIKED -> if (currentItem is UnsplashModel) {
+                            (holder as UnsplashImageViewHolder).updateLike(currentItem)
+                        } else return
+                    }
                 }
             }
         }
@@ -83,9 +86,8 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(binding.ivMainItem)
 
-            //binding.viewLikeButton.animateLike(model.isLiked)
-            binding.viewLikeButton.isSelected = model.isLiked //todo: лишнее, не работает
             binding.viewLikeButton.setLikes(model.likesNumber)
+            binding.viewLikeButton.setHeartImage(model.isLiked)
 
             binding.viewLikeButton.setOnClickListener {
                 likeListener(model)
@@ -95,7 +97,6 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
         //changed model
         fun updateLike(model: UnsplashModel) {
             binding.viewLikeButton.animateLike(model)
-            //binding.viewLikeButton.setAnimatedLikes(model.likesNumber)
         }
     }
 
@@ -106,11 +107,4 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
             else -> VIEW_TYPE_IMAGE
         }
     }
-
-    /*fun updateList(newList: List<RowItemType>) {
-        val diffCallback = UnsplashDiffCallback(myList, newList)
-        val diffResults = DiffUtil.calculateDiff(diffCallback)
-        myList = newList
-        diffResults.dispatchUpdatesTo(this)
-    }*/
 }

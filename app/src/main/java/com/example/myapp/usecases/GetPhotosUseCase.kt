@@ -23,8 +23,7 @@ class GetPhotosUseCaseImpl(
 
     override suspend fun execute(): List<RowItemType> {
         // get list of images
-        val imagesList = getUnsplashImages()
-        return imagesList
+        return getUnsplashImages()
     }
 
     private suspend fun getUnsplashImages(): List<RowItemType> {
