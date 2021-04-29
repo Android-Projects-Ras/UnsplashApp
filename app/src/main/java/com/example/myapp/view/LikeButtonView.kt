@@ -13,7 +13,7 @@ import com.example.myapp.models.UnsplashModel
 
 class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
 
-    private var _binding: ViewLikeButtonBinding? = null
+    private var _binding: ViewLikeButtonBinding? = null //todo: для чего тебе тут 2 поля, ещё и небезопасный доступ к _binding используешь. Если тебе не нужны нуллабл, делай переменные lateinit var
     private val binding get() = _binding!!
 
     init {
@@ -30,6 +30,7 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         }
     }
 
+    //todo: лучше назвать метод setLiked. Ты говоришь вьюхе лайкнута она или нет и в зависимости от этого выбираешь изображение
     fun setHeartImage(isLiked: Boolean) {
         binding.ivHeart.setImageResource(
             when (isLiked) {
@@ -69,6 +70,7 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         }
 
         AnimatorSet().apply {
+            //todo: зачем ты всё занёс в этот блок, если по сути используешь только метод playTogether и start. Отрефактори это, разбей и вынеси лишнее отсюда
             binding.ivHeart.setImageResource(
                 when (model.isLiked) {
                     true -> R.drawable.ic_heart_red

@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         //for error
         viewModel.errorLiveData.observe(this, Observer {
-            if (it != null) {
+            if (it != null) { //todo: ошибку ты обработал, а вот выхода из неё нет. Добавь кнопку Reload, которая будет заново делать запрос.
                 binding.rvMainImages.isVisible = false
                 binding.tvItemText.isVisible = true
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
