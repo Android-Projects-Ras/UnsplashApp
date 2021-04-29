@@ -5,10 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.AlphaAnimation
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.animation.addListener
 import androidx.core.view.isVisible
 import com.example.myapp.R
 import com.example.myapp.databinding.ViewLikeButtonBinding
@@ -43,7 +40,6 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
     }
 
     fun animateLike(model: UnsplashModel) {
-        Toast.makeText(context, "animateLike", Toast.LENGTH_SHORT).show()
         val animX = ObjectAnimator().apply {
             target = binding.ivHeart
             duration = 500
@@ -73,22 +69,19 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         }
 
         AnimatorSet().apply {
-            playTogether(animX, animY, alphaFadeOut, alphaFadeIn)
-
-            addListener(onStart = {
-                binding.ivHeart.setImageResource(
-                    when (model.isLiked) {
-                        true -> R.drawable.ic_heart_red
-                        else -> R.drawable.ic_heart_white
-                    }
-                )
-                if (model.likesNumber == 0) {
-                    binding.tvLikes.isVisible = false  //?
-                } else {
-                    binding.tvLikes.isVisible = true
-                    binding.tvLikes.text = model.likesNumber.toString()
+            binding.ivHeart.setImageResource(
+                when (model.isLiked) {
+                    true -> R.drawable.ic_heart_red
+                    else -> R.drawable.ic_heart_white
                 }
-            })
+            )
+            if (model.likesNumber == 0) {
+                playTogether(animX, animY, alphaFadeOut)
+            } else {
+                binding.tvLikes.isVisible = true
+                playTogether(animX, animY, alphaFadeOut, alphaFadeIn)
+                binding.tvLikes.text = model.likesNumber.toString()
+            }
             start()
         }
     }
