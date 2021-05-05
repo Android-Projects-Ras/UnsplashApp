@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constr_layout_like_button"
-    android:layout_width="100dp"
-    android:layout_height="50dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@drawable/btn_rounded_background">
 
     <ImageView
@@ -38,15 +38,18 @@
         android:layout_height="30dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/likes_cicle_background"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/likes_circle_background"
         android:gravity="center"
-        tools:text="0"
         android:textSize="12sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvButtonName"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

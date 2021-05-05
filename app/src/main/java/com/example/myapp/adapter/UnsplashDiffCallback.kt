@@ -11,6 +11,9 @@ object UnsplashDiffCallback : DiffUtil.ItemCallback<RowItemType>() {
             is UnsplashModel -> if (newItem is UnsplashModel) {
                 oldItem.id == newItem.id
             } else false
+            is TextItem -> if (newItem is TextItem) {
+                oldItem.title == newItem.title
+            } else false
             else -> false
         }
     }
@@ -20,7 +23,10 @@ object UnsplashDiffCallback : DiffUtil.ItemCallback<RowItemType>() {
             is UnsplashModel -> if (newItem is UnsplashModel) {
                 oldItem.likesNumber == newItem.likesNumber
             } else false
-            else -> false
+            is TextItem -> if (newItem is TextItem) {
+                oldItem.title == newItem.title
+            } else false
+            else -> true
         }
     }
 

@@ -15,15 +15,14 @@
 
     <com.example.myapp.view.LikeButtonView
         android:id="@+id/viewLikeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:clickable="true"
         android:focusable="true"
-        app:cardCornerRadius="15dp"/>   <!--wow!!!!-->
-
+        app:cardCornerRadius="15dp" />   <!--wow!!!!-->
 
 </androidx.cardview.widget.CardView>
 

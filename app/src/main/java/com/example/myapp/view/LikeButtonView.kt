@@ -1,5 +1,6 @@
 package com.example.myapp.view
 
+import CustomAnimations
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -13,25 +14,23 @@ import com.example.myapp.models.UnsplashModel
 
 class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
 
-    private var _binding: ViewLikeButtonBinding? = null //todo: для чего тебе тут 2 поля, ещё и небезопасный доступ к _binding используешь. Если тебе не нужны нуллабл, делай переменные lateinit var
-    private val binding get() = _binding!!
+    private var binding: ViewLikeButtonBinding
 
     init {
         val view = inflate(context, R.layout.view_like_button, this)
-        _binding = ViewLikeButtonBinding.bind(view)
+        binding = ViewLikeButtonBinding.bind(view)
     }
 
     fun setLikes(likes: Int) {
         if (likes == 0) {
-            binding.tvLikes.isVisible = false
+            binding.tvLikes.visibility = View.INVISIBLE
         } else {
-            binding.tvLikes.isVisible = true
+            binding.tvLikes.visibility = View.VISIBLE
             binding.tvLikes.text = likes.toString()
         }
     }
 
-    //todo: лучше назвать метод setLiked. Ты говоришь вьюхе лайкнута она или нет и в зависимости от этого выбираешь изображение
-    fun setHeartImage(isLiked: Boolean) {
+    fun setLiked(isLiked: Boolean) {
         binding.ivHeart.setImageResource(
             when (isLiked) {
                 true -> R.drawable.ic_heart_red
@@ -41,12 +40,12 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
     }
 
     fun animateLike(model: UnsplashModel) {
-        val animX = ObjectAnimator().apply {
+        /*val animX = ObjectAnimator().apply {
             target = binding.ivHeart
             duration = 500
             setPropertyName(View.SCALE_X.name)
             setFloatValues(0.8f, 1.1f, 0.9f, 1.0f)
-        }
+        }*/
 
         val animY = ObjectAnimator().apply {
             target = binding.ivHeart
@@ -69,23 +68,27 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
             setFloatValues(1.0f, 0f)
         }
 
-        AnimatorSet().apply {
-            //todo: зачем ты всё занёс в этот блок, если по сути используешь только метод playTogether и start. Отрефактори это, разбей и вынеси лишнее отсюда
-            binding.ivHeart.setImageResource(
-                when (model.isLiked) {
-                    true -> R.drawable.ic_heart_red
-                    else -> R.drawable.ic_heart_white
+        val animSet = AnimatorSet()
+        setLiked(model.isLiked)
+        when (model.likesNumber) {
+            0 -> animSet.playTogether(CustomAnimations().animX, animY, alphaFadeOut)
+            1 -> {
+                val likes: Int? = binding.tvLikes.text.toString().toIntOrNull()
+                if (likes != null && likes == 2) {
+                    binding.tvLikes.isVisible = true
+                    binding.tvLikes.text = model.likesNumber.toString()
+                    return
                 }
-            )
-            if (model.likesNumber == 0) {
-                playTogether(animX, animY, alphaFadeOut)
-            } else {
                 binding.tvLikes.isVisible = true
-                playTogether(animX, animY, alphaFadeOut, alphaFadeIn)
+                animSet.playTogether(CustomAnimations().animX, animY, alphaFadeIn)
                 binding.tvLikes.text = model.likesNumber.toString()
             }
-            start()
+            else -> {
+                binding.tvLikes.isVisible = true
+                binding.tvLikes.text = model.likesNumber.toString()
+            }
         }
+        animSet.start()
     }
 }
 

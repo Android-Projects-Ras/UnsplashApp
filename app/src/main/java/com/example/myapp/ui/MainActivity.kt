@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.databinding.ActivityMainBinding
-import com.example.myapp.models.UnsplashModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+lateinit var ACTIVITY_CONTEXT: MainActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ACTIVITY_CONTEXT = this
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupRecyclerView()
@@ -44,12 +46,23 @@ class MainActivity : AppCompatActivity() {
 
         //for error
         viewModel.errorLiveData.observe(this, Observer {
-            if (it != null) { //todo: ошибку ты обработал, а вот выхода из неё нет. Добавь кнопку Reload, которая будет заново делать запрос.
+            if (it != null) {
                 binding.rvMainImages.isVisible = false
-                binding.tvItemText.isVisible = true
+                binding.tvEmptyList.isVisible = true
+                binding.btnMainReload.isVisible = true
+                binding.btnMainReload.setOnClickListener {
+                    reload()
+                }
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun reload() {
+        viewModel.loadData()
+        binding.rvMainImages.isVisible = true
+        binding.btnMainReload.isVisible = true
+
     }
 
     private fun setupRecyclerView() {

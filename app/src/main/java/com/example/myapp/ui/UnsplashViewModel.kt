@@ -30,23 +30,27 @@ class UnsplashViewModel(
         }
 
     init {
+        loadData()
+    }
 
-        viewModelScope.launch(errorHandler) {
-            isLoadingLiveData.value = true
-            val list = getPhotosUseCase.execute()
-            if (list.isNullOrEmpty()) {
-                errorLiveData.value = "List is empty"
-                isLoadingLiveData.value = false
-            } else {
-                val listImages = ArrayList<RowItemType>(list).apply {
-                    add(0, TextItem("Hello"))
-                    add(TextItem("Bye"))
+        fun loadData() {
+            viewModelScope.launch(errorHandler) {
+                isLoadingLiveData.value = true
+                val list = getPhotosUseCase.execute()
+                if (list.isNullOrEmpty()) {
+                    errorLiveData.value = "List is empty"
+                    isLoadingLiveData.value = false
+                } else {
+                    val listImages = ArrayList<RowItemType>(list).apply {
+                        add(0, TextItem("Hello"))
+                        add(TextItem("Bye"))
+                    }
+                    listLiveData.value = listImages
+                    isLoadingLiveData.value = false
                 }
-                listLiveData.value = listImages
-                isLoadingLiveData.value = false
             }
         }
-    }
+
 
     //fun from MainActivity
     fun updateValue(model: UnsplashModel) {

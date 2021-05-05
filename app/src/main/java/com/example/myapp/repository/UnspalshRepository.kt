@@ -35,7 +35,7 @@ class UnsplashRepositoryImpl(
     override suspend fun getUnsplashImage(): List<UnsplashModel> {
         //map to UnsplashModel
         return api.searchImages().map {
-            val randomedLikes = Random.nextInt(0, 10)
+            val randomedLikes = Random.nextInt(0, 1)
             var randomedState = Random.nextBoolean()
             if (randomedLikes == 0) {
                 randomedState = false

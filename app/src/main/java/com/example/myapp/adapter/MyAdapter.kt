@@ -1,6 +1,8 @@
 package com.example.myapp.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -78,6 +80,7 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
     inner class UnsplashImageViewHolder(private val binding: RowItemImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("ClickableViewAccessibility")
         fun bind(model: UnsplashModel) {
 
             Glide.with(binding.root)
@@ -87,10 +90,23 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
                 .into(binding.ivMainItem)
 
             binding.viewLikeButton.setLikes(model.likesNumber)
-            binding.viewLikeButton.setHeartImage(model.isLiked)
+            binding.viewLikeButton.setLiked(model.isLiked)
 
             binding.viewLikeButton.setOnClickListener {
                 likeListener(model)
+            }
+            binding.root.setOnTouchListener { v, event ->
+                when (event?.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        v?.scaleX = 0.8f
+                        v?.scaleY = 0.8f
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        v?.scaleX = 1.0f
+                        v?.scaleY = 1.0f
+                    }
+                }
+                true
             }
         }
 
