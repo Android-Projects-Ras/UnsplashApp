@@ -6,6 +6,7 @@ import com.example.myapp.databinding.ViewLikeButtonBinding
 import com.example.myapp.ui.ACTIVITY_CONTEXT
 import com.example.myapp.view.LikeButtonView
 
+//todo: это лучше удалить)
 class CustomAnimations() {
     private val view =
         ConstraintLayout.inflate(

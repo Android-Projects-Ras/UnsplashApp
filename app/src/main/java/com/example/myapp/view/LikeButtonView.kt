@@ -39,7 +39,7 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         )
     }
 
-    fun animateLike(model: UnsplashModel) {
+    fun animateLike(model: UnsplashModel) { //todo: cразу не обратил внимания...Не передавай сюда всю модель, тебе тут нужны только количество лайков и лайнул ли ты. Вью должна получать только те данные, которые ей нужны
         /*val animX = ObjectAnimator().apply {
             target = binding.ivHeart
             duration = 500
@@ -69,7 +69,7 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         }
 
         val animSet = AnimatorSet()
-        setLiked(model.isLiked)
+        setLiked(model.isLiked) // todo: перенеси в onStart аниманции
         when (model.likesNumber) {
             0 -> animSet.playTogether(CustomAnimations().animX, animY, alphaFadeOut)
             1 -> {
@@ -77,11 +77,11 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
                 if (likes != null && likes == 2) {
                     binding.tvLikes.isVisible = true
                     binding.tvLikes.text = model.likesNumber.toString()
-                    return
+                    return // замени на if else конструкцию лучше
                 }
-                binding.tvLikes.isVisible = true
+                binding.tvLikes.isVisible = true //todo: перенеси в onStart блок для анимации
                 animSet.playTogether(CustomAnimations().animX, animY, alphaFadeIn)
-                binding.tvLikes.text = model.likesNumber.toString()
+                binding.tvLikes.text = model.likesNumber.toString() //todo: перенеси в onStart блок для анимации
             }
             else -> {
                 binding.tvLikes.isVisible = true

@@ -98,7 +98,7 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
             binding.root.setOnTouchListener { v, event ->
                 when (event?.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        v?.scaleX = 0.8f
+                        v?.scaleX = 0.8f //todo: анимируй
                         v?.scaleY = 0.8f
                     }
                     MotionEvent.ACTION_UP -> {
