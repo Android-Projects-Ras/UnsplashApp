@@ -1,16 +1,15 @@
 package com.example.myapp.view
 
-import CustomAnimations
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.animation.addListener
 import androidx.core.view.isVisible
 import com.example.myapp.R
 import com.example.myapp.databinding.ViewLikeButtonBinding
-import com.example.myapp.models.UnsplashModel
 
 class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
 
@@ -39,13 +38,13 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         )
     }
 
-    fun animateLike(model: UnsplashModel) { //todo: cразу не обратил внимания...Не передавай сюда всю модель, тебе тут нужны только количество лайков и лайнул ли ты. Вью должна получать только те данные, которые ей нужны
-        /*val animX = ObjectAnimator().apply {
+    fun animateLike(likesAmount: Int, isLiked: Boolean) {
+        val animX = ObjectAnimator().apply {
             target = binding.ivHeart
             duration = 500
             setPropertyName(View.SCALE_X.name)
             setFloatValues(0.8f, 1.1f, 0.9f, 1.0f)
-        }*/
+        }
 
         val animY = ObjectAnimator().apply {
             target = binding.ivHeart
@@ -69,23 +68,28 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
         }
 
         val animSet = AnimatorSet()
-        setLiked(model.isLiked) // todo: перенеси в onStart аниманции
-        when (model.likesNumber) {
-            0 -> animSet.playTogether(CustomAnimations().animX, animY, alphaFadeOut)
+        animSet.addListener(
+            onStart = {
+                setLiked(isLiked)
+                binding.tvLikes.isVisible = true
+                binding.tvLikes.text = likesAmount.toString()
+            }
+        )
+
+        when (likesAmount) {
+            0 -> animSet.playTogether(animX, animY, alphaFadeOut)
             1 -> {
                 val likes: Int? = binding.tvLikes.text.toString().toIntOrNull()
                 if (likes != null && likes == 2) {
                     binding.tvLikes.isVisible = true
-                    binding.tvLikes.text = model.likesNumber.toString()
-                    return // замени на if else конструкцию лучше
+                    binding.tvLikes.text = likesAmount.toString()
+                } else {
+                    animSet.playTogether(animX, animY, alphaFadeIn)
                 }
-                binding.tvLikes.isVisible = true //todo: перенеси в onStart блок для анимации
-                animSet.playTogether(CustomAnimations().animX, animY, alphaFadeIn)
-                binding.tvLikes.text = model.likesNumber.toString() //todo: перенеси в onStart блок для анимации
             }
             else -> {
                 binding.tvLikes.isVisible = true
-                binding.tvLikes.text = model.likesNumber.toString()
+                binding.tvLikes.text = likesAmount.toString()
             }
         }
         animSet.start()

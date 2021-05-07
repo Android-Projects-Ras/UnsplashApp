@@ -1,6 +1,7 @@
 package com.example.myapp.data.api
 
 import com.example.myapp.models.UnsplashModelResponse
+import okhttp3.OkHttpClient
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -17,10 +18,7 @@ interface UnsplashApi {
     suspend fun searchImages(
         @Query("page")
         pageNumber: Int = 1,
-        @Query("client_id")
-        apiKey: String = API_KEY,
         @Query("per_page")
         itemsNumber: Int = 20
-
     ): List<UnsplashModelResponse>
 }

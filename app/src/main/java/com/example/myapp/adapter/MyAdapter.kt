@@ -1,5 +1,6 @@
 package com.example.myapp.adapter
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -11,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.myapp.databinding.RowItemImageBinding
 import com.example.myapp.databinding.RowItemTextBinding
 import com.example.myapp.models.UnsplashModel
+
 
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
@@ -95,15 +97,39 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
             binding.viewLikeButton.setOnClickListener {
                 likeListener(model)
             }
+
             binding.root.setOnTouchListener { v, event ->
                 when (event?.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        v?.scaleX = 0.8f //todo: анимируй
-                        v?.scaleY = 0.8f
+                        ValueAnimator.ofFloat(1.0f, 0.8f).apply {
+                            addUpdateListener {
+                                val scale: Float = it.animatedValue.toString().toFloat()
+                                v.scaleX = scale
+                                v.scaleY = scale
+                            }
+                            start()
+                        }
                     }
                     MotionEvent.ACTION_UP -> {
-                        v?.scaleX = 1.0f
-                        v?.scaleY = 1.0f
+                        ValueAnimator.ofFloat(0.8f, 1.0f).apply {
+                            addUpdateListener {
+                                val scale: Float = it.animatedValue.toString().toFloat()
+                                binding.root.scaleX = scale
+                                binding.root.scaleY = scale
+                            }
+                            start()
+                        }
+                    }
+
+                    MotionEvent.ACTION_CANCEL -> {
+                        ValueAnimator.ofFloat(0.8f, 1.0f).apply {
+                            addUpdateListener {
+                                val scale: Float = it.animatedValue.toString().toFloat()
+                                binding.root.scaleX = scale
+                                binding.root.scaleY = scale
+                            }
+                            start()
+                        }
                     }
                 }
                 true
@@ -112,7 +138,7 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
 
         //changed model
         fun updateLike(model: UnsplashModel) {
-            binding.viewLikeButton.animateLike(model)
+            binding.viewLikeButton.animateLike(model.likesNumber, model.isLiked)
         }
     }
 

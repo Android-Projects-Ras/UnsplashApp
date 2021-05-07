@@ -11,7 +11,6 @@ import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-lateinit var ACTIVITY_CONTEXT: MainActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ACTIVITY_CONTEXT = this
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupRecyclerView()

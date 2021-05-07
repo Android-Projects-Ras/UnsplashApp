@@ -1,6 +1,7 @@
 package com.example.myapp.di
 
 import androidx.room.Room
+import com.example.myapp.data.api.ConnectivityInterceptor
 import com.example.myapp.data.api.UnsplashApi
 import com.example.myapp.data.api.UnsplashApi.Companion.BASE_URL
 import com.example.myapp.data.cache.InternalCache
@@ -56,6 +57,7 @@ val retrofitModule = module {
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor().apply { setLevel(HttpLoggingInterceptor.Level.BODY) })
+                    .addInterceptor(ConnectivityInterceptor())
                     .build()
             )
             .build()
