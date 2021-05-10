@@ -2,6 +2,7 @@ package com.example.myapp.models
 
 import androidx.room.Embedded
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class UnsplashModelResponse(
     @SerializedName("alt_description")

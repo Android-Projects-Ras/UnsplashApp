@@ -1,10 +1,15 @@
 package com.example.myapp.adapter
 
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,7 +24,13 @@ const val VIEW_TYPE_TEXT = 2
 
 const val PAYLOAD_IMAGE_ITEM_LIKED = "PayloadImageItemLiked"
 
-class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
+class MyAdapter(
+    private val likeListener: ((UnsplashModel) -> Unit),
+    private val itemClickListener: (
+        model: UnsplashModel,
+        itemImageView: ImageView
+    ) -> Unit
+) :
     ListAdapter<RowItemType, RecyclerView.ViewHolder>(UnsplashDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -84,6 +95,7 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
 
         @SuppressLint("ClickableViewAccessibility")
         fun bind(model: UnsplashModel) {
+            val currentItem = getItem(adapterPosition)
 
             Glide.with(binding.root)
                 .load(model.url)
@@ -98,15 +110,31 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
                 likeListener(model)
             }
 
+            //Setting shared element transition
+            ViewCompat.setTransitionName(binding.ivMainItem, model.id)
+            //binding.ivMainItem.transitionName = model.id
+
+            binding.root.setOnClickListener {
+                itemClickListener(model, binding.ivMainItem)
+            }
+
             binding.root.setOnTouchListener { v, event ->
                 when (event?.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        ValueAnimator.ofFloat(1.0f, 0.8f).apply {
+                        /*ValueAnimator.ofFloat(1.0f, 0.8f).apply {
                             addUpdateListener {
                                 val scale: Float = it.animatedValue.toString().toFloat()
                                 v.scaleX = scale
                                 v.scaleY = scale
                             }
+                            start()
+                        }*/
+                        ObjectAnimator().apply {
+                            target = v
+                            duration = 500
+                            setPropertyName(View.SCALE_X.name)
+                            setPropertyName(View.SCALE_Y.name)
+                            setFloatValues(1.0f, 0.8f)
                             start()
                         }
                     }
@@ -114,8 +142,8 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
                         ValueAnimator.ofFloat(0.8f, 1.0f).apply {
                             addUpdateListener {
                                 val scale: Float = it.animatedValue.toString().toFloat()
-                                binding.root.scaleX = scale
-                                binding.root.scaleY = scale
+                                v.scaleX = scale
+                                v.scaleY = scale
                             }
                             start()
                         }
@@ -125,8 +153,8 @@ class MyAdapter(private val likeListener: ((UnsplashModel) -> Unit)) :
                         ValueAnimator.ofFloat(0.8f, 1.0f).apply {
                             addUpdateListener {
                                 val scale: Float = it.animatedValue.toString().toFloat()
-                                binding.root.scaleX = scale
-                                binding.root.scaleY = scale
+                                v.scaleX = scale
+                                v.scaleY = scale
                             }
                             start()
                         }

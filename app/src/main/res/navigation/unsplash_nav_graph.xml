@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/unsplash_nav_graph"
+    app:startDestination="@id/listImagesFragment">
+
+    <fragment
+        android:id="@+id/listImagesFragment"
+        android:name="com.example.myapp.ui.ListImagesFragment"
+        android:label="ListImagesFragment" >
+        <action
+            android:id="@+id/action_listImagesFragment_to_detailImageFragment"
+            app:destination="@id/detailImageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailImageFragment"
+        android:name="com.example.myapp.ui.DetailImageFragment"
+        android:label="DetailImageFragment" >
+        <argument
+            android:name="UnsplashModel"
+            app:argType="com.example.myapp.models.UnsplashModel" />
+    </fragment>
+</navigation>
