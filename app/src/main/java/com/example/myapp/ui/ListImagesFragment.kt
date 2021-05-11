@@ -8,12 +8,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.R
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.databinding.FragmentListImagesBinding
+import com.example.myapp.models.UnsplashModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ListImagesFragment: Fragment(R.layout.fragment_list_images) {
@@ -28,8 +31,7 @@ class ListImagesFragment: Fragment(R.layout.fragment_list_images) {
             },
             itemClickListener = { model, itemImageView ->
                 val extras = FragmentNavigatorExtras(itemImageView to model.id)
-
-            //navigateTo(model)            //navigate to detail fragment
+                navigateTo(model, extras)            //navigate to detail fragment
             }
         )
     }
@@ -41,8 +43,9 @@ class ListImagesFragment: Fragment(R.layout.fragment_list_images) {
 
         //for images
         viewModel.listLiveData.observe(viewLifecycleOwner, Observer {
-                //myAdapter.submitList(it)
-            myAdapter.submitList(it)
+            it?.let {
+                myAdapter.submitList(it)
+            }
 
         })
 
@@ -85,9 +88,10 @@ class ListImagesFragment: Fragment(R.layout.fragment_list_images) {
         }
     }
 
-    /*private fun navigateTo(model: UnsplashViewModel) {
-        val action
-    }*/
+    private fun navigateTo(model: UnsplashModel, extras: FragmentNavigator.Extras) {
+        val action = ListImagesFragmentDirections.actionListImagesFragmentToDetailImageFragment(model)
+        findNavController().navigate(action, extras)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

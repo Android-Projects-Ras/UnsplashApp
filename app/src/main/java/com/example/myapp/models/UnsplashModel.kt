@@ -11,8 +11,8 @@ data class UnsplashModel(
     val url: String,
     val likesNumber: Int,
     val isLiked: Boolean,
-    /*val altDescription: String,
-    val height: Int?,
-    val width: Int?,
-    val createdAt: String?*/
+    val altDescription: String,
+    val height: Int,
+    val width: Int,
+    val createdAt: String
 ) : RowItemType, Parcelable

@@ -95,7 +95,8 @@ class MyAdapter(
 
         @SuppressLint("ClickableViewAccessibility")
         fun bind(model: UnsplashModel) {
-            val currentItem = getItem(adapterPosition)
+            val currentModel = getItem(absoluteAdapterPosition) as UnsplashModel
+
 
             Glide.with(binding.root)
                 .load(model.url)
@@ -114,29 +115,29 @@ class MyAdapter(
             ViewCompat.setTransitionName(binding.ivMainItem, model.id)
             //binding.ivMainItem.transitionName = model.id
 
-            binding.root.setOnClickListener {
-                itemClickListener(model, binding.ivMainItem)
+            binding.ivMainItem.setOnClickListener {
+                itemClickListener(currentModel, binding.ivMainItem)
             }
 
-            binding.root.setOnTouchListener { v, event ->
+            /*binding.ivMainItem.setOnTouchListener { v, event ->
                 when (event?.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        /*ValueAnimator.ofFloat(1.0f, 0.8f).apply {
+                        ValueAnimator.ofFloat(1.0f, 0.8f).apply {
                             addUpdateListener {
                                 val scale: Float = it.animatedValue.toString().toFloat()
                                 v.scaleX = scale
                                 v.scaleY = scale
                             }
                             start()
-                        }*/
-                        ObjectAnimator().apply {
+                        }
+                        *//*ObjectAnimator().apply {
                             target = v
                             duration = 500
                             setPropertyName(View.SCALE_X.name)
                             setPropertyName(View.SCALE_Y.name)
                             setFloatValues(1.0f, 0.8f)
                             start()
-                        }
+                        }*//*
                     }
                     MotionEvent.ACTION_UP -> {
                         ValueAnimator.ofFloat(0.8f, 1.0f).apply {
@@ -161,7 +162,7 @@ class MyAdapter(
                     }
                 }
                 true
-            }
+            }*/
         }
 
         //changed model

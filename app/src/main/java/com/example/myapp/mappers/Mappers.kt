@@ -10,7 +10,11 @@ fun UnsplashModelResponse.toUnsplashModel(): UnsplashModel {  // response to dom
         description = this.description ?: "",
         url = this.urls?.regular ?: "",
         likesNumber = 0,
-        isLiked = false
+        isLiked = false,
+        altDescription = this.altDescription ?: "",
+        height = this.height ?: 0,
+        width = this.width ?: 0,
+        createdAt = this.createdAt ?: ""
     )
 }
 
@@ -20,7 +24,11 @@ fun UnsplashModelEntity.toUnsplashModel(): UnsplashModel {   //  entity to domai
         description = this.description ?: "",
         url = this.url ?: "",
         likesNumber = 0,
-        isLiked = false
+        isLiked = false,
+        altDescription = "",
+        height = 0,
+        width = 0,
+        createdAt = ""
     )
 }
 
