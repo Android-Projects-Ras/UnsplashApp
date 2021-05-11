@@ -34,7 +34,7 @@ class DetailImageFragment: Fragment(R.layout.fragment_detail_image) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(
-                android.R.transition.slide_left
+                android.R.transition.move
             )
         }
     }

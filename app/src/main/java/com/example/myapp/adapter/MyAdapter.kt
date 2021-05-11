@@ -1,14 +1,9 @@
 package com.example.myapp.adapter
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +18,7 @@ const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 
 const val PAYLOAD_IMAGE_ITEM_LIKED = "PayloadImageItemLiked"
+const val PAYLOAD_IMAGE_ITEM_CHANGED = "PayloadImageItemChanged"
 
 class MyAdapter(
     private val likeListener: ((UnsplashModel) -> Unit),
@@ -53,6 +49,7 @@ class MyAdapter(
         }
     }
 
+    //Come in changed model
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
@@ -67,6 +64,9 @@ class MyAdapter(
                     when (key) {
                         PAYLOAD_IMAGE_ITEM_LIKED -> if (currentItem is UnsplashModel) {
                             (holder as UnsplashImageViewHolder).updateLike(currentItem)
+                        } else return
+                        PAYLOAD_IMAGE_ITEM_CHANGED -> if (currentItem is UnsplashModel) {
+                            (holder as UnsplashImageViewHolder).changeState(currentItem)
                         } else return
                     }
                 }
@@ -95,8 +95,6 @@ class MyAdapter(
 
         @SuppressLint("ClickableViewAccessibility")
         fun bind(model: UnsplashModel) {
-            val currentModel = getItem(absoluteAdapterPosition) as UnsplashModel
-
 
             Glide.with(binding.root)
                 .load(model.url)
@@ -112,11 +110,10 @@ class MyAdapter(
             }
 
             //Setting shared element transition
-            ViewCompat.setTransitionName(binding.ivMainItem, model.id)
-            //binding.ivMainItem.transitionName = model.id
+            binding.ivMainItem.transitionName = model.id
 
             binding.ivMainItem.setOnClickListener {
-                itemClickListener(currentModel, binding.ivMainItem)
+                itemClickListener(model, binding.ivMainItem)
             }
 
             /*binding.ivMainItem.setOnTouchListener { v, event ->
@@ -168,6 +165,12 @@ class MyAdapter(
         //changed model
         fun updateLike(model: UnsplashModel) {
             binding.viewLikeButton.animateLike(model.likesNumber, model.isLiked)
+        }
+
+        fun changeState(model: UnsplashModel) {
+                binding.ivMainItem.setOnClickListener {
+                    itemClickListener(model, binding.ivMainItem)
+                }
         }
     }
 
