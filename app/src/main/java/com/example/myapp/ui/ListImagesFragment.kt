@@ -2,13 +2,10 @@ package com.example.myapp.ui
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -48,25 +45,26 @@ class ListImagesFragment : Fragment(R.layout.fragment_list_images) {
             it?.let {
                 myAdapter.submitList(it)
             }
+        })
+
+        viewModel.isLoadingLiveData.observe(viewLifecycleOwner, {
+            binding.pbMain.isVisible = it
+        })
+
+        viewModel.reloadBtnTvEmptyListLiveData.observe(viewLifecycleOwner, {
+            binding.btnMainReload.isVisible = it
+            binding.tvEmptyList.isVisible = it
 
         })
 
-        //for progress bar
-        viewModel.isLoadingLiveData.observe(viewLifecycleOwner, {
-            binding.pbMain.isVisible = it
+        viewModel.rvMainImagesLiveData.observe(viewLifecycleOwner, {
+            binding.rvMainImages.isVisible = it
         })
 
         //for error
         viewModel.errorLiveData.observe(viewLifecycleOwner, { errorText ->
             if (errorText != null) {
                 binding.apply {
-                    viewModel.rvMainImagesLiveData.observe(viewLifecycleOwner, {
-                        rvMainImages.isVisible = it
-                    })
-                    viewModel.reloadBtnTvEmptyListLiveData.observe(viewLifecycleOwner, {
-                        tvEmptyList.isVisible = it
-                        btnMainReload.isVisible = it
-                    })
                     btnMainReload.setOnClickListener {
                         reload()
                     }
@@ -77,15 +75,7 @@ class ListImagesFragment : Fragment(R.layout.fragment_list_images) {
     }
 
     private fun reload() {
-        viewModel.reloadBtnTvEmptyListLiveData.observe(viewLifecycleOwner, {
-            binding.btnMainReload.isVisible = it
-            binding.tvEmptyList.isVisible = it
-
-        })
         viewModel.loadData()
-        viewModel.rvMainImagesLiveData.observe(viewLifecycleOwner, {
-            binding.rvMainImages.isVisible = it
-        })
     }
 
     private fun setupRecyclerView() {
