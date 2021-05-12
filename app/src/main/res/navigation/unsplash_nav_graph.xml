@@ -16,7 +16,7 @@
         android:name="com.example.myapp.ui.DetailImageFragment"
         android:label="DetailImageFragment" >
         <argument
-            android:name="UnsplashModel"
+            android:name="unsplashModel"
             app:argType="com.example.myapp.models.UnsplashModel" />
     </fragment>
 </navigation>

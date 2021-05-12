@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -24,23 +23,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:singleLine="false"
-        tools:text="Description: "
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@+id/tvDate"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivDetail"
-        app:layout_constraintHorizontal_bias="0"/>
-        <!--tools:text="@tools:sample/lorem/random"/>-->
+        tools:text="Description: " />
 
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        tools:text="Date: 07.07"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivDetail" />
+        app:layout_constraintTop_toBottomOf="@+id/ivDetail"
+        tools:text="Date: 07.07" />
 </androidx.constraintlayout.widget.ConstraintLayout>

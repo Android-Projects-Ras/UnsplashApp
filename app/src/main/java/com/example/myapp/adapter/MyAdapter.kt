@@ -64,9 +64,7 @@ class MyAdapter(
                     when (key) {
                         PAYLOAD_IMAGE_ITEM_LIKED -> if (currentItem is UnsplashModel) {
                             (holder as UnsplashImageViewHolder).updateLike(currentItem)
-                        } else return
-                        PAYLOAD_IMAGE_ITEM_CHANGED -> if (currentItem is UnsplashModel) {
-                            (holder as UnsplashImageViewHolder).changeState(currentItem)
+                            holder.changeState(currentItem)
                         } else return
                     }
                 }

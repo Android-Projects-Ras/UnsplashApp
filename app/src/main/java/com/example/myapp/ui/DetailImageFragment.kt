@@ -3,13 +3,10 @@ package com.example.myapp.ui
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.PatternMatcher
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.BulletSpan
-import android.text.style.ForegroundColorSpan
+import android.text.Html
+import android.text.Html.FROM_HTML_MODE_LEGACY
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
@@ -20,47 +17,56 @@ import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
+import com.example.myapp.models.UnsplashModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.regex.Pattern
+
 
 class DetailImageFragment: Fragment(R.layout.fragment_detail_image) {
 
-    private var _binding: FragmentDetailImageBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentDetailImageBinding
     private val args by navArgs<DetailImageFragmentArgs>()
+    private val viewModel by viewModel<UnsplashViewModel>() { parametersOf(args)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(
-                android.R.transition.move
-            )
-        }
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentDetailImageBinding.bind(view)
 
-        val photoUrl = args.UnsplashModel.url //todo: поправь UnsplashModel чтобы с маленькой буквы вначале было
+        binding = FragmentDetailImageBinding.bind(view)
+
+        viewModel.unsplashModelLiveData.observe(viewLifecycleOwner, { model ->
+            val photoUrl = model.url
+
+
+        //val photoUrl = args.unsplashModel.url //todo: поправь UnsplashModel чтобы с маленькой буквы вначале было
 
         Glide.with(binding.root)
             .load(photoUrl)
             .into(binding.ivDetail)
 
-        val date = args.UnsplashModel.createdAt //todo: передавай UnsplashModel параметром во вьюмодель и лайвдатой передавай во фрагмент
-        val description = args.UnsplashModel.altDescription
-        val width = args.UnsplashModel.width.toString()
-        val height = args.UnsplashModel.height.toString()
-        val likesCount = args.UnsplashModel.likesNumber
-        val isLiked = args.UnsplashModel.isLiked
+            binding.ivDetail.transitionName = model.id
+
+        val date = model.createdAt //todo: передавай UnsplashModel параметром во вьюмодель и лайвдатой передавай во фрагмент
+        val description = model.altDescription
+        val width = model.width.toString()
+        val height = model.height.toString()
+        val likesCount = model.likesNumber
+        val isLiked = model.isLiked
 
         //val regex = "(.+)(.{15})"
 
         val necessaryDatePart = date.substring(0, 10)
-        val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).run { parse(necessaryDatePart) }
-        val myDate = SimpleDateFormat("dd.MM", Locale.ENGLISH).format(parsedDate)
+        val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).run { parse(
+            necessaryDatePart
+        ) }
+        val myDate = SimpleDateFormat("dd.MM", Locale.ENGLISH).format(parsedDate).toFloat()
 
         binding.tvDescription.text = buildSpannedString {
             bold {
@@ -83,17 +89,11 @@ class DetailImageFragment: Fragment(R.layout.fragment_detail_image) {
             }
         }
 
-        binding.tvDate.text = buildSpannedString {
-            bold {
-                color(Color.BLACK) { append("Date: ") }
-            }
-            color(Color.GRAY) {append(myDate)}
-        }
+        val dateWithRes = getString(R.string.date_detail_fragment, myDate)
+
+            binding.tvDate.text = Html.fromHtml(dateWithRes, FROM_HTML_MODE_LEGACY)
+        })
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
 }

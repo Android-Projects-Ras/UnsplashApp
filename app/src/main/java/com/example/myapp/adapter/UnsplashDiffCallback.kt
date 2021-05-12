@@ -35,8 +35,6 @@ object UnsplashDiffCallback : DiffUtil.ItemCallback<RowItemType>() {
         if (oldItem is UnsplashModel && newItem is UnsplashModel) {
             if (oldItem.likesNumber != newItem.likesNumber)
                 payloads.add(PAYLOAD_IMAGE_ITEM_LIKED)
-            if (oldItem.isLiked != newItem.isLiked)
-                payloads.add(PAYLOAD_IMAGE_ITEM_CHANGED)
         }
         return payloads.ifEmpty { null }
     }

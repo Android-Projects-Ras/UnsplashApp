@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyApp</string>
+    <string name="date_detail_fragment"><![CDATA[<b><font color=#000000>Date: </font></b>]]>%1$.2f</string>
+    <!--<string name="date_detail_fragment"><b> <font color=#000000> Date: </b> %1$.2f</string>-->
 </resources>

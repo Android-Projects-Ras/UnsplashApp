@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,10 +20,9 @@ import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ListImagesFragment: Fragment(R.layout.fragment_list_images) {
+class ListImagesFragment : Fragment(R.layout.fragment_list_images) {
 
-    private var _binding :FragmentListImagesBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentListImagesBinding
     private val viewModel by viewModel<UnsplashViewModel>()
     private val myAdapter by lazy {
         MyAdapter(
@@ -38,11 +38,13 @@ class ListImagesFragment: Fragment(R.layout.fragment_list_images) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentListImagesBinding.bind(view)
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+        binding = FragmentListImagesBinding.bind(view)
         setupRecyclerView()
 
         //for images
-        viewModel.listLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.listLiveData.observe(viewLifecycleOwner, {
             it?.let {
                 myAdapter.submitList(it)
             }
@@ -50,37 +52,51 @@ class ListImagesFragment: Fragment(R.layout.fragment_list_images) {
         })
 
         //for progress bar
-        viewModel.isLoadingLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.isLoadingLiveData.observe(viewLifecycleOwner, {
             binding.pbMain.isVisible = it
         })
 
         //for error
-        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
+        viewModel.errorLiveData.observe(viewLifecycleOwner, { errorText ->
+            if (errorText != null) {
                 binding.apply {
-                    rvMainImages.isVisible = false
-                    tvEmptyList.isVisible = true
-                    btnMainReload.isVisible = true
+                    viewModel.rvMainImagesLiveData.observe(viewLifecycleOwner, {
+                        rvMainImages.isVisible = it
+                    })
+                    viewModel.reloadBtnTvEmptyListLiveData.observe(viewLifecycleOwner, {
+                        tvEmptyList.isVisible = it
+                        btnMainReload.isVisible = it
+                    })
                     btnMainReload.setOnClickListener {
                         reload()
                     }
                 }
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), errorText, Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     private fun reload() {
-        binding.btnMainReload.isVisible = false //todo: изменение видимости должно быть сделано через лайвдату и управляться во вью модели
-        binding.tvEmptyList.isVisible = false
-        viewModel.loadData()
-        binding.rvMainImages.isVisible = true
+        viewModel.reloadBtnTvEmptyListLiveData.observe(viewLifecycleOwner, {
+            binding.btnMainReload.isVisible = it
+            binding.tvEmptyList.isVisible = it
 
+        })
+        viewModel.loadData()
+        viewModel.rvMainImagesLiveData.observe(viewLifecycleOwner, {
+            binding.rvMainImages.isVisible = it
+        })
     }
 
     private fun setupRecyclerView() {
         binding.rvMainImages.apply {
             adapter = myAdapter
+            postponeEnterTransition()
+            viewTreeObserver
+                .addOnPreDrawListener {
+                    startPostponedEnterTransition()
+                    true
+                }
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(
                 CustomItemDecoration(8, 8, 16, 0)
@@ -89,12 +105,9 @@ class ListImagesFragment: Fragment(R.layout.fragment_list_images) {
     }
 
     private fun navigateTo(model: UnsplashModel, extras: FragmentNavigator.Extras) {
-        val action = ListImagesFragmentDirections.actionListImagesFragmentToDetailImageFragment(model)
+        val action =
+            ListImagesFragmentDirections.actionListImagesFragmentToDetailImageFragment(model)
         findNavController().navigate(action, extras)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
 }
