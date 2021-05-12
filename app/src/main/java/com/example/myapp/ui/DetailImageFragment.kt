@@ -43,13 +43,13 @@ class DetailImageFragment: Fragment(R.layout.fragment_detail_image) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentDetailImageBinding.bind(view)
 
-        val photoUrl = args.UnsplashModel.url
+        val photoUrl = args.UnsplashModel.url //todo: поправь UnsplashModel чтобы с маленькой буквы вначале было
 
         Glide.with(binding.root)
             .load(photoUrl)
             .into(binding.ivDetail)
 
-        val date = args.UnsplashModel.createdAt
+        val date = args.UnsplashModel.createdAt //todo: передавай UnsplashModel параметром во вьюмодель и лайвдатой передавай во фрагмент
         val description = args.UnsplashModel.altDescription
         val width = args.UnsplashModel.width.toString()
         val height = args.UnsplashModel.height.toString()

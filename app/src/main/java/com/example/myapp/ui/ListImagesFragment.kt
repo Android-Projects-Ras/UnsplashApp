@@ -71,7 +71,7 @@ class ListImagesFragment: Fragment(R.layout.fragment_list_images) {
     }
 
     private fun reload() {
-        binding.btnMainReload.isVisible = false
+        binding.btnMainReload.isVisible = false //todo: изменение видимости должно быть сделано через лайвдату и управляться во вью модели
         binding.tvEmptyList.isVisible = false
         viewModel.loadData()
         binding.rvMainImages.isVisible = true
