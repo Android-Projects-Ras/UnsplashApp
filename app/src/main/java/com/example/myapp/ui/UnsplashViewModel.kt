@@ -1,6 +1,7 @@
 package com.example.myapp.ui
 
 import  android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,15 +13,27 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import java.util.*
 
+abstract class BaseUnsplashModel : ViewModel() {
+    abstract val listLiveData: LiveData<List<RowItemType>>
+
+    abstract val errorLiveData: LiveData<String>
+
+    abstract val isLoadingLiveData: LiveData<Boolean>
+
+    abstract val reloadBtnTvEmptyListLiveData: LiveData<Boolean>
+
+    abstract val rvMainImagesLiveData: LiveData<Boolean>
+}
+
 class UnsplashViewModel(
     private val getPhotosUseCase: GetPhotosUseCase
-) : ViewModel() {
+) : BaseUnsplashModel() {
 
-    val listLiveData = MutableLiveData<List<RowItemType>>()
-    val errorLiveData = MutableLiveData<String>()
-    val isLoadingLiveData = MutableLiveData<Boolean>()
-    val reloadBtnTvEmptyListLiveData = MutableLiveData<Boolean>()
-    val rvMainImagesLiveData = MutableLiveData<Boolean>()
+    override val listLiveData get() = MutableLiveData<List<RowItemType>>()
+    override val errorLiveData get() = MutableLiveData<String>()
+    override val isLoadingLiveData get() = MutableLiveData<Boolean>()
+    override val reloadBtnTvEmptyListLiveData get() = MutableLiveData<Boolean>()
+    override val rvMainImagesLiveData get() = MutableLiveData<Boolean>()
 
     private val errorHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
@@ -37,26 +50,25 @@ class UnsplashViewModel(
         loadData()
     }
 
-        fun loadData() {
-            viewModelScope.launch(errorHandler) {
-                reloadBtnTvEmptyListLiveData.value = false
-                isLoadingLiveData.value = true
-                val list = getPhotosUseCase.execute()
-                if (list.isNullOrEmpty()) {
-                    errorLiveData.value = "List is empty"
-                    isLoadingLiveData.value = false
-                } else {
-                    val listImages = ArrayList(list).apply {
-                        add(0, TextItem("Hello"))
-                        add(TextItem("Bye"))
-                    }
-                    listLiveData.value = listImages
-                    isLoadingLiveData.value = false
-                    rvMainImagesLiveData.value = true
+    fun loadData() {
+        viewModelScope.launch(errorHandler) {
+            reloadBtnTvEmptyListLiveData.value = false
+            isLoadingLiveData.value = true
+            val list = getPhotosUseCase.execute()
+            if (list.isNullOrEmpty()) {
+                errorLiveData.value = "List is empty"
+                isLoadingLiveData.value = false
+            } else {
+                val listImages = ArrayList(list).apply {
+                    add(0, TextItem("Hello"))
+                    add(TextItem("Bye"))
                 }
+                listLiveData.value = listImages
+                isLoadingLiveData.value = false
+                rvMainImagesLiveData.value = true
             }
         }
-
+    }
 
     //fun from MainActivity
     fun updateValue(model: UnsplashModel) {

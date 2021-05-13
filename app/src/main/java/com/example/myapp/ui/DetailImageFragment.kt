@@ -1,6 +1,7 @@
 package com.example.myapp.ui
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -9,14 +10,20 @@ import android.text.Spanned
 import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.text.scale
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
 import com.example.myapp.models.UnsplashModel
@@ -26,11 +33,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class DetailImageFragment : Fragment(R.layout.fragment_detail_image) {
+//class DetailImageFragment : Fragment(R.layout.fragment_detail_image) {
+class DetailImageFragment : BaseFragment<FragmentDetailImageBinding, UnsplashDetailViewModel>(R.layout.fragment_detail_image) {
 
-    private lateinit var binding: FragmentDetailImageBinding
+    override lateinit var binding: FragmentDetailImageBinding
     private val args by navArgs<DetailImageFragmentArgs>()
-    private val viewModel by viewModel<UnsplashDetailViewModel>() { parametersOf(args) }
+    override val viewModel by viewModel<UnsplashDetailViewModel>() { parametersOf(args) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,11 +56,30 @@ class DetailImageFragment : Fragment(R.layout.fragment_detail_image) {
         viewModel.unsplashModelLiveData.observe(viewLifecycleOwner, { model ->
             val photoUrl = model.url
 
-
-            //val photoUrl = args.unsplashModel.url //todo: поправь UnsplashModel чтобы с маленькой буквы вначале было
-
             Glide.with(binding.root)
                 .load(photoUrl)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        startPostponedEnterTransition()
+                        return false
+                    }
+
+                })
                 .into(binding.ivDetail)
 
             binding.ivDetail.transitionName = model.id
@@ -63,7 +90,6 @@ class DetailImageFragment : Fragment(R.layout.fragment_detail_image) {
             val height = model.height.toString()
             val likesCount = model.likesNumber
             val isLiked = model.isLiked
-
 
             //val regex = "(.+)(.{15})"
 

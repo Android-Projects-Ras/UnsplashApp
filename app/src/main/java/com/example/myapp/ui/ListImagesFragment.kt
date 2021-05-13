@@ -1,7 +1,9 @@
 package com.example.myapp.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
@@ -17,10 +19,12 @@ import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ListImagesFragment : Fragment(R.layout.fragment_list_images) {
+//class ListImagesFragment : Fragment(R.layout.fragment_list_images) {
+class ListImagesFragment : BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(R.layout.fragment_list_images) {
 
-    private lateinit var binding: FragmentListImagesBinding
-    private val viewModel by viewModel<UnsplashViewModel>()
+    override val viewModel by viewModel<UnsplashViewModel>()
+    override lateinit var binding: FragmentListImagesBinding
+
     private val myAdapter by lazy {
         MyAdapter(
             likeListener = { model ->
@@ -35,8 +39,8 @@ class ListImagesFragment : Fragment(R.layout.fragment_list_images) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
+        postponeEnterTransition()
         binding = FragmentListImagesBinding.bind(view)
         setupRecyclerView()
 
