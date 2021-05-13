@@ -13,15 +13,13 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class UnsplashViewModel(
-    private val getPhotosUseCase: GetPhotosUseCase,
-    private val model: UnsplashModel
+    private val getPhotosUseCase: GetPhotosUseCase
 ) : ViewModel() {
 
     val listLiveData = MutableLiveData<List<RowItemType>>()
     val errorLiveData = MutableLiveData<String>()
     val isLoadingLiveData = MutableLiveData<Boolean>()
     val reloadBtnTvEmptyListLiveData = MutableLiveData<Boolean>()
-    val unsplashModelLiveData = MutableLiveData(model)
     val rvMainImagesLiveData = MutableLiveData<Boolean>()
 
     private val errorHandler: CoroutineExceptionHandler =

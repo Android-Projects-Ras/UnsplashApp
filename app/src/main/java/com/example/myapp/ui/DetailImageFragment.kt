@@ -5,6 +5,8 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_LEGACY
+import android.text.Spanned
+import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.text.bold
@@ -24,15 +26,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class DetailImageFragment: Fragment(R.layout.fragment_detail_image) {
+class DetailImageFragment : Fragment(R.layout.fragment_detail_image) {
 
     private lateinit var binding: FragmentDetailImageBinding
     private val args by navArgs<DetailImageFragmentArgs>()
-    private val viewModel by viewModel<UnsplashViewModel>() { parametersOf(args)}
+    private val viewModel by viewModel<UnsplashDetailViewModel>() { parametersOf(args) }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -45,52 +49,54 @@ class DetailImageFragment: Fragment(R.layout.fragment_detail_image) {
             val photoUrl = model.url
 
 
-        //val photoUrl = args.unsplashModel.url //todo: поправь UnsplashModel чтобы с маленькой буквы вначале было
+            //val photoUrl = args.unsplashModel.url //todo: поправь UnsplashModel чтобы с маленькой буквы вначале было
 
-        Glide.with(binding.root)
-            .load(photoUrl)
-            .into(binding.ivDetail)
+            Glide.with(binding.root)
+                .load(photoUrl)
+                .into(binding.ivDetail)
 
             binding.ivDetail.transitionName = model.id
 
-        val date = model.createdAt //todo: передавай UnsplashModel параметром во вьюмодель и лайвдатой передавай во фрагмент
-        val description = model.altDescription
-        val width = model.width.toString()
-        val height = model.height.toString()
-        val likesCount = model.likesNumber
-        val isLiked = model.isLiked
+            val date = model.createdAt
+            val description = model.altDescription
+            val width = model.width.toString()
+            val height = model.height.toString()
+            val likesCount = model.likesNumber
+            val isLiked = model.isLiked
 
-        //val regex = "(.+)(.{15})"
 
-        val necessaryDatePart = date.substring(0, 10)
-        val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).run { parse(
-            necessaryDatePart
-        ) }
-        val myDate = SimpleDateFormat("dd.MM", Locale.ENGLISH).format(parsedDate).toFloat()
+            //val regex = "(.+)(.{15})"
 
-        binding.tvDescription.text = buildSpannedString {
-            bold {
-                color(Color.BLACK) {scale(1.1f) {append("Description: ")}}
+            val necessaryDatePart = date.substring(0, 10)
+            val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).run {
+                parse(
+                    necessaryDatePart
+                )
             }
-            color(Color.GRAY) {append(description)}
+            val myDate = SimpleDateFormat("dd.MM", Locale.ENGLISH).format(parsedDate).toFloat()
 
-            bold {
-                color(Color.BLACK) {scale(1.1f) {append("\nSize: ")}}
+            binding.tvDescription.text = buildSpannedString {
+                bold {
+                    color(Color.BLACK) { scale(1.1f) { append("Description: ") } }
+                }
+                color(Color.GRAY) { append(description) }
+
+                bold {
+                    color(Color.BLACK) { scale(1.1f) { append("\nSize: ") } }
+                }
+                color(Color.GRAY) { append("$width X $height") }
+
+                bold {
+                    color(Color.BLACK) { scale(1.1f) { append("\nLikes count: ") } }
+                }
+                if (isLiked) {
+                    color(Color.RED) { append(likesCount.toString()) }
+                } else {
+                    color(Color.GRAY) { append(likesCount.toString()) }
+                }
             }
-            color(Color.GRAY) {append("$width X $height")}
 
-            bold {
-                color(Color.BLACK) {scale(1.1f) {append("\nLikes count: ")}}
-            }
-            if (isLiked) {
-                color(Color.RED) {append(likesCount.toString())}
-            } else {
-                color(Color.GRAY) {append(likesCount.toString())}
-            }
-        }
-
-        val dateWithRes = getString(R.string.date_detail_fragment, myDate)
-
+            val dateWithRes = getString(R.string.date_detail_fragment, myDate)
             binding.tvDate.text = Html.fromHtml(dateWithRes, FROM_HTML_MODE_LEGACY)
         })
 

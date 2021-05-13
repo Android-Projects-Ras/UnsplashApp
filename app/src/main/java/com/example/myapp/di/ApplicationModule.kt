@@ -11,6 +11,7 @@ import com.example.myapp.models.UnsplashModel
 import com.example.myapp.repository.UnsplashRepository
 import com.example.myapp.repository.UnsplashRepositoryImpl
 import com.example.myapp.ui.DetailImageFragmentArgs
+import com.example.myapp.ui.UnsplashDetailViewModel
 import com.example.myapp.ui.UnsplashViewModel
 import com.example.myapp.usecases.GetPhotosUseCase
 import com.example.myapp.usecases.GetPhotosUseCaseImpl
@@ -29,8 +30,13 @@ val useCaseModule = module {
 }
 
 val viewModelModule = module {
+
+    viewModel {
+        UnsplashViewModel(get())
+    }
+
     viewModel { (args: DetailImageFragmentArgs) ->
-        UnsplashViewModel(get(), args.unsplashModel)
+        UnsplashDetailViewModel(args.unsplashModel)
     }
 }
 

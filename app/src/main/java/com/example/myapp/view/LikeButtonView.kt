@@ -81,6 +81,7 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
             1 -> {
                 val likes: Int? = binding.tvLikes.text.toString().toIntOrNull()
                 if (likes != null && likes == 2) {
+                    animSet.playTogether(animX, animY)
                     binding.tvLikes.isVisible = true
                     binding.tvLikes.text = likesAmount.toString()
                 } else {
