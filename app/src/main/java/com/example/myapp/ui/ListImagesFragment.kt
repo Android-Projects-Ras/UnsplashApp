@@ -14,13 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.R
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
+import com.example.myapp.databinding.FragmentDetailImageBinding
 import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ListImagesFragment : BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(R.layout.fragment_list_images) {
+class ListImagesFragment :
+    BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(R.layout.fragment_list_images) {
 
-    override val viewModel: UnsplashViewModel by viewModel()
     private val myAdapter by lazy {
         MyAdapter(
             likeListener = { model ->
@@ -36,13 +36,12 @@ class ListImagesFragment : BaseFragment<FragmentListImagesBinding, UnsplashViewM
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentListImagesBinding
         get() = FragmentListImagesBinding::inflate
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /*super.onViewCreated(view, savedInstanceState)*/
+        super.onViewCreated(view, savedInstanceState)
+
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
         setupRecyclerView()
-
 
         //for images
         viewModel.listLiveData.observe(viewLifecycleOwner, {

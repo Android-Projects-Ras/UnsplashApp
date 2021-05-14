@@ -24,6 +24,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
+import com.example.myapp.databinding.FragmentListImagesBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -32,19 +33,20 @@ import java.util.*
 class DetailImageFragment :
     BaseFragment<FragmentDetailImageBinding, UnsplashDetailViewModel>(R.layout.fragment_detail_image) {
 
+
     private val args by navArgs<DetailImageFragmentArgs>()
-    override val viewModel by viewModel<UnsplashDetailViewModel>() { parametersOf(args) }
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailImageBinding
-        get() = FragmentDetailImageBinding::inflate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition =
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailImageBinding
+        get() = FragmentDetailImageBinding::inflate
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //binding = FragmentDetailImageBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
