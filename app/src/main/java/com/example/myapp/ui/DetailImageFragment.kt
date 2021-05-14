@@ -6,17 +6,15 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_LEGACY
-import android.text.Spanned
-import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.text.scale
 import androidx.core.view.doOnPreDraw
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
@@ -26,20 +24,18 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
-import com.example.myapp.models.UnsplashModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
 
+class DetailImageFragment :
+    BaseFragment<FragmentDetailImageBinding, UnsplashDetailViewModel>(R.layout.fragment_detail_image) {
 
-//class DetailImageFragment : Fragment(R.layout.fragment_detail_image) {
-class DetailImageFragment : BaseFragment<FragmentDetailImageBinding, UnsplashDetailViewModel>(R.layout.fragment_detail_image) {
-
-    override lateinit var binding: FragmentDetailImageBinding
     private val args by navArgs<DetailImageFragmentArgs>()
     override val viewModel by viewModel<UnsplashDetailViewModel>() { parametersOf(args) }
-
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailImageBinding
+        get() = FragmentDetailImageBinding::inflate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +46,7 @@ class DetailImageFragment : BaseFragment<FragmentDetailImageBinding, UnsplashDet
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentDetailImageBinding.bind(view)
+        postponeEnterTransition()
 
         viewModel.unsplashModelLiveData.observe(viewLifecycleOwner, { model ->
             val photoUrl = model.url
@@ -75,10 +70,9 @@ class DetailImageFragment : BaseFragment<FragmentDetailImageBinding, UnsplashDet
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        startPostponedEnterTransition()
+                        view.doOnPreDraw { startPostponedEnterTransition() }
                         return false
                     }
-
                 })
                 .into(binding.ivDetail)
 

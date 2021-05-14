@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -19,12 +18,9 @@ import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-//class ListImagesFragment : Fragment(R.layout.fragment_list_images) {
 class ListImagesFragment : BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(R.layout.fragment_list_images) {
 
-    override val viewModel by viewModel<UnsplashViewModel>()
-    override lateinit var binding: FragmentListImagesBinding
-
+    override val viewModel: UnsplashViewModel by viewModel()
     private val myAdapter by lazy {
         MyAdapter(
             likeListener = { model ->
@@ -37,12 +33,16 @@ class ListImagesFragment : BaseFragment<FragmentListImagesBinding, UnsplashViewM
         )
     }
 
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentListImagesBinding
+        get() = FragmentListImagesBinding::inflate
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.doOnPreDraw { startPostponedEnterTransition() }
+        /*super.onViewCreated(view, savedInstanceState)*/
         postponeEnterTransition()
-        binding = FragmentListImagesBinding.bind(view)
+        view.doOnPreDraw { startPostponedEnterTransition() }
         setupRecyclerView()
+
 
         //for images
         viewModel.listLiveData.observe(viewLifecycleOwner, {
@@ -103,5 +103,6 @@ class ListImagesFragment : BaseFragment<FragmentListImagesBinding, UnsplashViewM
             ListImagesFragmentDirections.actionListImagesFragmentToDetailImageFragment(model)
         findNavController().navigate(action, extras)
     }
+
 
 }

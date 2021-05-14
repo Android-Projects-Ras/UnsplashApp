@@ -29,11 +29,11 @@ class UnsplashViewModel(
     private val getPhotosUseCase: GetPhotosUseCase
 ) : BaseUnsplashModel() {
 
-    override val listLiveData get() = MutableLiveData<List<RowItemType>>()
-    override val errorLiveData get() = MutableLiveData<String>()
-    override val isLoadingLiveData get() = MutableLiveData<Boolean>()
-    override val reloadBtnTvEmptyListLiveData get() = MutableLiveData<Boolean>()
-    override val rvMainImagesLiveData get() = MutableLiveData<Boolean>()
+    override val listLiveData = MutableLiveData<List<RowItemType>>()
+    override val errorLiveData = MutableLiveData<String>()
+    override val isLoadingLiveData = MutableLiveData<Boolean>()
+    override val reloadBtnTvEmptyListLiveData = MutableLiveData<Boolean>()
+    override val rvMainImagesLiveData = MutableLiveData<Boolean>()
 
     private val errorHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->

@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myapp.models.UnsplashModel
 
-abstract class BaseUnsplashDetailViewModel: ViewModel() {
+abstract class BaseUnsplashDetailViewModel : ViewModel() {
     abstract val unsplashModelLiveData: LiveData<UnsplashModel>
 }
 
 class UnsplashDetailViewModel(
     private val model: UnsplashModel
-): BaseUnsplashDetailViewModel() {
+) : BaseUnsplashDetailViewModel() {
 
-    override val unsplashModelLiveData get() = MutableLiveData(model)
+    override val unsplashModelLiveData = MutableLiveData(model)
 
 }
