@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapp.R
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
-import com.example.myapp.databinding.FragmentDetailImageBinding
 import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
 
 class ListImagesFragment :
-    BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(R.layout.fragment_list_images) {
+    BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(
+        R.layout.fragment_list_images,
+        FragmentListImagesBinding::inflate
+    ) {
 
     private val myAdapter by lazy {
         MyAdapter(
@@ -32,9 +34,6 @@ class ListImagesFragment :
             }
         )
     }
-
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentListImagesBinding
-        get() = FragmentListImagesBinding::inflate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

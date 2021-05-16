@@ -13,7 +13,6 @@ import com.example.myapp.databinding.RowItemImageBinding
 import com.example.myapp.databinding.RowItemTextBinding
 import com.example.myapp.models.UnsplashModel
 
-
 const val VIEW_TYPE_IMAGE = 1
 const val VIEW_TYPE_TEXT = 2
 const val PAYLOAD_IMAGE_ITEM_LIKED = "PayloadImageItemLiked"

@@ -15,23 +15,23 @@ import org.koin.core.parameter.emptyParametersHolder
 import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 
-abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(layoutId: Int) :
-    Fragment(layoutId) {
+typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
-    private var _binding: ViewBinding? = null
-    abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
+abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
+    layoutId: Int,
+    private val inflate: Inflate<VB>
+) : Fragment(layoutId) {
 
-    @Suppress("UNCHECKED_CAST")
-    protected val binding: VB
-        get() = _binding as VB
+    private var _binding: VB? = null
+    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = bindingInflater.invoke(inflater, container, false)
-        return requireNotNull(_binding).root
+        _binding = inflate.invoke(inflater, container, false)
+        return binding.root
     }
 
     override fun onDestroyView() {

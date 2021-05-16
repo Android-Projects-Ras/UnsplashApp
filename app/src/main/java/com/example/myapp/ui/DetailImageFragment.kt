@@ -6,15 +6,12 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_LEGACY
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.text.scale
-import androidx.core.view.doOnPreDraw
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
@@ -24,15 +21,14 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
-import com.example.myapp.databinding.FragmentListImagesBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
 
 class DetailImageFragment :
-    BaseFragment<FragmentDetailImageBinding, UnsplashDetailViewModel>(R.layout.fragment_detail_image) {
-
+    BaseFragment<FragmentDetailImageBinding, UnsplashDetailViewModel>(
+        R.layout.fragment_detail_image,
+        FragmentDetailImageBinding::inflate
+    ) {
 
     private val args by navArgs<DetailImageFragmentArgs>()
 
@@ -41,12 +37,9 @@ class DetailImageFragment :
         sharedElementEnterTransition =
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailImageBinding
-        get() = FragmentDetailImageBinding::inflate
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //binding = FragmentDetailImageBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
@@ -72,7 +65,7 @@ class DetailImageFragment :
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        view.doOnPreDraw { startPostponedEnterTransition() }
+                        startPostponedEnterTransition()
                         return false
                     }
                 })
