@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.myapp.R
 import com.example.myapp.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -24,9 +23,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_graph) as NavHostFragment
         navController = navHostFragment.findNavController()
-
-        lifecycleState = lifecycle.currentState
-        Log.d("Rogok", "onCreate: $lifecycleState")
 
     }
 }

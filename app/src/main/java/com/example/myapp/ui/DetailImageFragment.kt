@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.Target
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,8 +33,8 @@ class DetailImageFragment :
         R.layout.fragment_detail_image,
         FragmentDetailImageBinding::inflate
     ) {
-    override val viewModelClass: KClass<UnsplashDetailViewModel>
-        get() = UnsplashDetailViewModel::class
+    /*override val viewModelClass: KClass<UnsplashDetailViewModel>
+        get() = UnsplashDetailViewModel::class*/
     //private val args by navArgs<DetailImageFragmentArgs>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,6 +120,10 @@ class DetailImageFragment :
             binding.tvDate.text = Html.fromHtml(dateWithRes, FROM_HTML_MODE_LEGACY)
         })
 
+    }
+
+    override fun getParameters(): ParametersDefinition = {
+        parametersOf(DetailImageFragmentArgs.fromBundle(requireArguments()))
     }
 
 }

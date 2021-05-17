@@ -13,6 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.koin.getViewModel
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.parameter.emptyParametersHolder
+import org.koin.core.parameter.parametersOf
 import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 
@@ -35,21 +36,16 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    lateinit var viewModel: VM
+    /*lateinit var viewModel: VM
     abstract val viewModelClass: KClass<VM>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         viewModel = getViewModel(clazz = viewModelClass)
 
         super.onCreate(savedInstanceState)
-    }
+    }*/
 
-    /*protected open val viewModel: VM by lazy {
+    protected open val viewModel: VM by lazy {
         getKoin().getViewModel(
             owner = { ViewModelOwner.from(this, this) },
             clazz = getViewModelKClass(),
@@ -66,5 +62,10 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
 
     open fun getParameters(): ParametersDefinition = {
         emptyParametersHolder()
-    }*/
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
