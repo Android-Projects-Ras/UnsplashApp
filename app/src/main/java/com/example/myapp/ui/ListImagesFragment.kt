@@ -1,9 +1,7 @@
 package com.example.myapp.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
@@ -16,19 +14,12 @@ import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.ParametersDefinition
-import org.koin.core.parameter.emptyParametersHolder
-import kotlin.reflect.KClass
 
 class ListImagesFragment :
     BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(
         R.layout.fragment_list_images,
         FragmentListImagesBinding::inflate
     ) {
-    /*override val viewModelClass: KClass<UnsplashViewModel>
-        get() = UnsplashViewModel::class*/
-    //private val viewModel by viewModel<UnsplashViewModel>()
 
     private val myAdapter by lazy {
         MyAdapter(

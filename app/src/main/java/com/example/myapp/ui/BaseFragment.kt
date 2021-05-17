@@ -9,11 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ViewModelOwner
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.koin.getViewModel
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.parameter.emptyParametersHolder
-import org.koin.core.parameter.parametersOf
 import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 
@@ -36,15 +34,6 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
         return binding.root
     }
 
-    /*lateinit var viewModel: VM
-    abstract val viewModelClass: KClass<VM>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        viewModel = getViewModel(clazz = viewModelClass)
-
-        super.onCreate(savedInstanceState)
-    }*/
-
     protected open val viewModel: VM by lazy {
         getKoin().getViewModel(
             owner = { ViewModelOwner.from(this, this) },
@@ -56,7 +45,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     @Suppress("UNCHECKED_CAST")
     protected fun getViewModelKClass(): KClass<VM> {
         val actualClass =
-            (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<VM>
+            (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<VM>
         return actualClass.kotlin
     }
 

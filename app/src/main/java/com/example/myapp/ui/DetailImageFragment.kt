@@ -12,7 +12,6 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.text.scale
-import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -21,21 +20,16 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.reflect.KClass
 
 class DetailImageFragment :
     BaseFragment<FragmentDetailImageBinding, UnsplashDetailViewModel>(
         R.layout.fragment_detail_image,
         FragmentDetailImageBinding::inflate
     ) {
-    /*override val viewModelClass: KClass<UnsplashDetailViewModel>
-        get() = UnsplashDetailViewModel::class*/
-    //private val args by navArgs<DetailImageFragmentArgs>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,5 +119,4 @@ class DetailImageFragment :
     override fun getParameters(): ParametersDefinition = {
         parametersOf(DetailImageFragmentArgs.fromBundle(requireArguments()))
     }
-
 }
