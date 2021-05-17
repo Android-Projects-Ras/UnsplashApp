@@ -21,16 +21,20 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.reflect.KClass
 
 class DetailImageFragment :
     BaseFragment<FragmentDetailImageBinding, UnsplashDetailViewModel>(
         R.layout.fragment_detail_image,
         FragmentDetailImageBinding::inflate
     ) {
-
-    private val args by navArgs<DetailImageFragmentArgs>()
+    override val viewModelClass: KClass<UnsplashDetailViewModel>
+        get() = UnsplashDetailViewModel::class
+    //private val args by navArgs<DetailImageFragmentArgs>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

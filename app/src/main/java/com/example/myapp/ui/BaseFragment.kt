@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ViewModelOwner
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.koin.getViewModel
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.parameter.emptyParametersHolder
@@ -39,7 +40,16 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
         _binding = null
     }
 
-    protected open val viewModel: VM by lazy {
+    lateinit var viewModel: VM
+    abstract val viewModelClass: KClass<VM>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        viewModel = getViewModel(clazz = viewModelClass)
+
+        super.onCreate(savedInstanceState)
+    }
+
+    /*protected open val viewModel: VM by lazy {
         getKoin().getViewModel(
             owner = { ViewModelOwner.from(this, this) },
             clazz = getViewModelKClass(),
@@ -56,5 +66,5 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
 
     open fun getParameters(): ParametersDefinition = {
         emptyParametersHolder()
-    }
+    }*/
 }

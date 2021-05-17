@@ -16,12 +16,17 @@ import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.reflect.KClass
 
 class ListImagesFragment :
     BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(
         R.layout.fragment_list_images,
         FragmentListImagesBinding::inflate
     ) {
+    override val viewModelClass: KClass<UnsplashViewModel>
+        get() = UnsplashViewModel::class
+    //private val viewModel by viewModel<UnsplashViewModel>()
 
     private val myAdapter by lazy {
         MyAdapter(
