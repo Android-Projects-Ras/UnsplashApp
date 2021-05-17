@@ -34,6 +34,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
         return binding.root
     }
 
+    //todo: поля классе должны быть выше всех методов
     protected open val viewModel: VM by lazy {
         getKoin().getViewModel(
             owner = { ViewModelOwner.from(this, this) },

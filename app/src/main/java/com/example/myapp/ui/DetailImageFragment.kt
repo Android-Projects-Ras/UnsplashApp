@@ -54,6 +54,7 @@ class DetailImageFragment :
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
+                        //todo: если картинка не загрузится то приложение зависнет, нужно обработать. тут тоже старт нужно вызвать
                         return false
                     }
 
@@ -72,6 +73,7 @@ class DetailImageFragment :
 
             binding.ivDetail.transitionName = model.id
 
+            //todo: блок с текстом занимает слишком много места, поэтому в таких случаях имеет смысл выносить это в отдельное вью. Создай кастомную вьюху, передавай ей только модель, а всю обработку внутри делай
             val date = model.createdAt
             val description = model.altDescription
             val width = model.width.toString()
