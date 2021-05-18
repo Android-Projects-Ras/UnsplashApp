@@ -10,6 +10,7 @@ import androidx.core.text.color
 import androidx.core.text.scale
 import com.example.myapp.R
 import com.example.myapp.databinding.ViewDescriptionTextBinding
+import com.example.myapp.models.DescriptionTextModel
 import com.example.myapp.models.UnsplashModel
 
 class DescriptionTextView(context: Context, attr: AttributeSet?) : ConstraintLayout(context, attr) {
@@ -21,19 +22,13 @@ class DescriptionTextView(context: Context, attr: AttributeSet?) : ConstraintLay
         binding = ViewDescriptionTextBinding.bind(view)
     }
 
-    fun setDescriptionText(model: UnsplashModel) {
-
-        val description = model.altDescription
-        val width = model.width.toString()
-        val height = model.height.toString()
-        val likesCount = model.likesNumber
-        val isLiked = model.isLiked
+    fun setDescriptionText(model: DescriptionTextModel) {
 
         binding.tvDescription.text = buildSpannedString {
             bold {
                 color(Color.BLACK) { scale(1.1f) { append("Description: ") } }
             }
-            color(Color.GRAY) { append(description) }
+            color(Color.GRAY) { append(model.description) }
 
             bold {
                 color(Color.BLACK) { scale(1.1f) { append("\nSize: ") } }
@@ -43,10 +38,10 @@ class DescriptionTextView(context: Context, attr: AttributeSet?) : ConstraintLay
             bold {
                 color(Color.BLACK) { scale(1.1f) { append("\nLikes count: ") } }
             }
-            if (isLiked) {
-                color(Color.RED) { append(likesCount.toString()) }
+            if (model.isLiked) {
+                color(Color.RED) { append(model.likesCount.toString()) }
             } else {
-                color(Color.GRAY) { append(likesCount.toString()) }
+                color(Color.GRAY) { append(model.likesCount.toString()) }
             }
         }
     }

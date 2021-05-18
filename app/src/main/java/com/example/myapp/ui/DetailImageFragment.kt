@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
+import com.example.myapp.models.DescriptionTextModel
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -66,8 +67,16 @@ class DetailImageFragment :
                 })
                 .into(binding.ivDetail)
 
+            val descriptionTextModel = DescriptionTextModel(
+                description = model.altDescription,
+                width = model.width,
+                height = model.height,
+                likesCount = model.likesNumber,
+                isLiked = model.isLiked
+            )
+
             binding.ivDetail.transitionName = model.id
-            binding.viewDescription.setDescriptionText(model)
+            binding.viewDescription.setDescriptionText(descriptionTextModel)
 
             val date = model.createdAt
 

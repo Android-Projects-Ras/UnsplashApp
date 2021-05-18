@@ -10,12 +10,16 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.example.myapp.R
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
+import kotlinx.android.synthetic.main.fragment_list_images.view.*
+
 
 class ListImagesFragment :
     BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(
@@ -89,15 +93,28 @@ class ListImagesFragment :
                     startPostponedEnterTransition()
                     true
                 }
-            layoutManager = LinearLayoutManager(context)
+            //layoutManager = LinearLayoutManager(context)
+            layoutManager = (GridLayoutManager(context, 2)).apply {
+                spanSizeLookup = object : SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return if (position == 0 || position == itemCount - 1) 2 else 1
+                    }
+                }
+            }
+
             addItemDecoration(
                 CustomItemDecoration(8, 8, 16, 0)
             )
+            val snapHelper = LinearSnapHelper()
+            snapHelper.attachToRecyclerView(binding.rvMainImages)
         }
     }
 
     //handling double click
-    private fun NavController.safeNavigate(direction: NavDirections, extras: FragmentNavigator.Extras) {
+    private fun NavController.safeNavigate(
+        direction: NavDirections,
+        extras: FragmentNavigator.Extras
+    ) {
         currentDestination?.getAction(direction.actionId)?.run {
             navigate(direction, extras)
         }

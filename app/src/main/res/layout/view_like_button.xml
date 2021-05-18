@@ -17,10 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/btn_heart_state" />
 
-    <!--   todo: tools:text="Like" будет отображать текст только в превью моде, что в данном случае и нужно -->
-    <!--   todo: удобное сокращение id типвьюОписание, например tvLike, tvLikeCount, ivHeart-->
-    <!--   todo: xml файл строются по принципу что_описание или что_где_описание fragment_main, item_main_image, view_like_button-->
-    <!--   todo: для drawable такой же принцип, если что то общее, то раздел где пропускается, например ic_heart_read или ic_main_heard_red-->
     <TextView
         android:id="@+id/tvButtonName"
         android:layout_width="wrap_content"

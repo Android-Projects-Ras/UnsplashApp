@@ -3,6 +3,7 @@ package com.example.myapp.view
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -18,6 +19,20 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
     init {
         val view = inflate(context, R.layout.view_like_button, this)
         binding = ViewLikeButtonBinding.bind(view)
+        attrs?.let {
+
+            val styledAttributes =
+                context.obtainStyledAttributes(it, R.styleable.LikeButtonView, 0, 0)
+            val icon = styledAttributes.getDrawable(R.styleable.LikeButtonView_icon)
+
+            setIcon(icon)
+            styledAttributes.recycle()
+        }
+    }
+
+    private fun setIcon(icon: Drawable?) {
+        binding.ivHeart.setImageDrawable(icon)
+
     }
 
     fun setLikes(likes: Int) {
@@ -30,12 +45,7 @@ class LikeButtonView(context: Context, attrs: AttributeSet?) : ConstraintLayout(
     }
 
     fun setLiked(isLiked: Boolean) {
-        binding.ivHeart.setImageResource(
-            when (isLiked) {
-                true -> R.drawable.ic_heart_red
-                else -> R.drawable.ic_heart_white
-            }
-        )
+        binding.ivHeart.isSelected = isLiked
     }
 
     fun animateLike(likesAmount: Int, isLiked: Boolean) {
