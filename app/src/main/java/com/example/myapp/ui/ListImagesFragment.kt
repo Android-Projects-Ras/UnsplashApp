@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -94,9 +96,16 @@ class ListImagesFragment :
         }
     }
 
+    //handling double click
+    private fun NavController.safeNavigate(direction: NavDirections, extras: FragmentNavigator.Extras) {
+        currentDestination?.getAction(direction.actionId)?.run {
+            navigate(direction, extras)
+        }
+    }
+
     private fun navigateTo(model: UnsplashModel, extras: FragmentNavigator.Extras) {
         val action =
             ListImagesFragmentDirections.actionListImagesFragmentToDetailImageFragment(model)
-        findNavController().navigate(action, extras)
+        findNavController().safeNavigate(action, extras)
     }
 }

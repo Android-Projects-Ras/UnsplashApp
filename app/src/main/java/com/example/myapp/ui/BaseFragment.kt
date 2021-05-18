@@ -25,6 +25,14 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     private var _binding: VB? = null
     val binding get() = _binding!!
 
+    protected open val viewModel: VM by lazy {
+        getKoin().getViewModel(
+            owner = { ViewModelOwner.from(this, this) },
+            clazz = getViewModelKClass(),
+            parameters = getParameters()
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,15 +40,6 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     ): View? {
         _binding = inflate.invoke(inflater, container, false)
         return binding.root
-    }
-
-    //todo: поля классе должны быть выше всех методов
-    protected open val viewModel: VM by lazy {
-        getKoin().getViewModel(
-            owner = { ViewModelOwner.from(this, this) },
-            clazz = getViewModelKClass(),
-            parameters = getParameters()
-        )
     }
 
     @Suppress("UNCHECKED_CAST")
