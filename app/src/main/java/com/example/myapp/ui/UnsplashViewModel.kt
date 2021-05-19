@@ -60,7 +60,7 @@ class UnsplashViewModel(
                 isLoadingLiveData.value = false
             } else {
                 val listImages = ArrayList(list).apply {
-                    add(0, TextItem("Hello"))
+                    add(0, TextItem("Hi"))
                     add(TextItem("Bye"))
                 }
                 listLiveData.value = listImages

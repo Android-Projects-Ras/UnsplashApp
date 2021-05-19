@@ -27,5 +27,4 @@ class UnsplashDetailViewModel(
 
     override val descriptionTextLiveData = MutableLiveData(descriptionTextModel)
 
-
 }
