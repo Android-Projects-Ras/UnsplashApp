@@ -16,9 +16,10 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import com.example.myapp.R
 import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
+import com.example.myapp.adapter.VIEW_TYPE_IMAGE
+import com.example.myapp.adapter.VIEW_TYPE_TEXT
 import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
-import kotlinx.android.synthetic.main.fragment_list_images.view.*
 
 
 class ListImagesFragment :
@@ -93,11 +94,14 @@ class ListImagesFragment :
                     startPostponedEnterTransition()
                     true
                 }
-            //layoutManager = LinearLayoutManager(context)
             layoutManager = (GridLayoutManager(context, 2)).apply {
                 spanSizeLookup = object : SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
-                        return if (position == 0 || position == itemCount - 1) 2 else 1
+                        return when (adapter?.getItemViewType(position)) {
+                            VIEW_TYPE_IMAGE -> 1
+                            VIEW_TYPE_TEXT -> 2
+                            else -> 1
+                        }
                     }
                 }
             }
@@ -106,7 +110,7 @@ class ListImagesFragment :
                 CustomItemDecoration(8, 8, 16, 0)
             )
             val snapHelper = LinearSnapHelper()
-            snapHelper.attachToRecyclerView(binding.rvMainImages)
+            snapHelper.attachToRecyclerView(this)
         }
     }
 

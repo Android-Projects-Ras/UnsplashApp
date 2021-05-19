@@ -15,13 +15,12 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.myapp.R
 import com.example.myapp.databinding.FragmentDetailImageBinding
-import com.example.myapp.models.DescriptionTextModel
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DetailImageFragment :
+class DetailImageFragment ://args
     BaseFragment<FragmentDetailImageBinding, UnsplashDetailViewModel>(
         R.layout.fragment_detail_image,
         FragmentDetailImageBinding::inflate
@@ -38,6 +37,7 @@ class DetailImageFragment :
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
 
+        //BaseFragment, give me viewModel with args
         viewModel.unsplashModelLiveData.observe(viewLifecycleOwner, { model ->
             val photoUrl = model.url
 
@@ -67,21 +67,10 @@ class DetailImageFragment :
                 })
                 .into(binding.ivDetail)
 
-            val descriptionTextModel = DescriptionTextModel(
-                description = model.altDescription,
-                width = model.width,
-                height = model.height,
-                likesCount = model.likesNumber,
-                isLiked = model.isLiked
-            )
-
+            //todo:а транзишинНейм отдельной вью моделью задать, чтобы не передавать всю UnsplashModel
             binding.ivDetail.transitionName = model.id
-            binding.viewDescription.setDescriptionText(descriptionTextModel)
 
             val date = model.createdAt
-
-            //val regex = "(.+)(.{15})"
-
             val necessaryDatePart = date.substring(0, 10)
             val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).run {
                 parse(
@@ -91,6 +80,11 @@ class DetailImageFragment :
             val myDate = SimpleDateFormat("dd.MM", Locale.ENGLISH).format(parsedDate).toFloat()
             val dateWithRes = getString(R.string.date_detail_fragment, myDate)
             binding.tvDate.text = Html.fromHtml(dateWithRes, FROM_HTML_MODE_LEGACY)
+        })
+
+        viewModel.descriptionTextLiveData.observe(viewLifecycleOwner, {
+            binding.viewDescription.setDescriptionText(it)
+
         })
     }
 

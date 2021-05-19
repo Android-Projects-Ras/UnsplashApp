@@ -25,6 +25,8 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     private var _binding: VB? = null
     val binding get() = _binding!!
 
+
+    //Koin, give me viewModel with args
     protected open val viewModel: VM by lazy {
         getKoin().getViewModel(
             owner = { ViewModelOwner.from(this, this) },
