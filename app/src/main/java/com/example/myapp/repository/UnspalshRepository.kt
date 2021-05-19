@@ -54,7 +54,7 @@ class UnsplashRepositoryImpl(
     }
 
     override suspend fun clearCacheAndRoom() {
-        val folder = File(path)
+        val folder = File(path) //todo: лучше вынести удаление кешированных картинок в InternalCache, где ты их кешируешь
         val filesInFolder = folder.listFiles()
         filesInFolder?.forEach {
             it.delete()
