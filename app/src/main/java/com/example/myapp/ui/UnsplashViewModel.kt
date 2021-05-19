@@ -32,8 +32,8 @@ class UnsplashViewModel(
     override val listLiveData = MutableLiveData<List<RowItemType>>()
     override val errorLiveData = MutableLiveData<String>()
     override val isLoadingLiveData = MutableLiveData<Boolean>()
-    override val reloadBtnTvEmptyListLiveData = MutableLiveData<Boolean>()
-    override val rvMainImagesLiveData = MutableLiveData<Boolean>()
+    override val reloadBtnTvEmptyListLiveData = MutableLiveData<Boolean>() //todo: подумай над названием. несостыковывается название и назначение
+    override val rvMainImagesLiveData = MutableLiveData<Boolean>() //todo: подумай над названием. несостыковывается название и назначение
 
     private val errorHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
@@ -57,7 +57,7 @@ class UnsplashViewModel(
             val list = getPhotosUseCase.execute()
             if (list.isNullOrEmpty()) {
                 errorLiveData.value = "List is empty"
-                isLoadingLiveData.value = false
+                isLoadingLiveData.value = false //todo: используется и в if и else, можно вынести после них
             } else {
                 val listImages = ArrayList(list).apply {
                     add(0, TextItem("Hi"))

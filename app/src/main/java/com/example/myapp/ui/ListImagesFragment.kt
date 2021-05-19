@@ -43,8 +43,8 @@ class ListImagesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
+        postponeEnterTransition() //todo: зачем это, если ты ниже в ресайклере это делаешь
+        view.doOnPreDraw { startPostponedEnterTransition() } //todo: зачем это, если ты ниже в ресайклере это делаешь
         setupRecyclerView()
 
         //for images
@@ -81,6 +81,7 @@ class ListImagesFragment :
         })
     }
 
+    //todo: метод этот особо не нужен, можно напрямую метод лайвдаты вызвать
     private fun reload() {
         viewModel.loadData()
     }

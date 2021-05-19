@@ -13,11 +13,12 @@ abstract class BaseUnsplashDetailViewModel : ViewModel() {
 }
 
 class UnsplashDetailViewModel(
-    private val model: UnsplashModel
+    private val model: UnsplashModel //todo: убери private val, как поле класса она тут не нужна, есть же unsplashModelLiveData
 ) : BaseUnsplashDetailViewModel() {
 
     override val unsplashModelLiveData = MutableLiveData(model)
 
+    //todo: как поле она тут не особо нужна, лучшее просто в конструкторе создать. По сути она дублируется у тебя тут и в лайвдате
     private val descriptionTextModel = DescriptionTextModel(
         description = model.altDescription,
         width = model.width,
