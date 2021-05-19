@@ -67,9 +67,6 @@ class DetailImageFragment ://args
                 })
                 .into(binding.ivDetail)
 
-            //todo:а транзишинНейм отдельной вью моделью задать, чтобы не передавать всю UnsplashModel
-            binding.ivDetail.transitionName = model.id
-
             val date = model.createdAt
             val necessaryDatePart = date.substring(0, 10)
             val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).run {
@@ -84,7 +81,10 @@ class DetailImageFragment ://args
 
         viewModel.descriptionTextLiveData.observe(viewLifecycleOwner, {
             binding.viewDescription.setDescriptionText(it)
+        })
 
+        viewModel.transitionLiveData.observe(viewLifecycleOwner, {
+            binding.ivDetail.transitionName = it
         })
     }
 

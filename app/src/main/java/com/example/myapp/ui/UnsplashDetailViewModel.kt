@@ -9,6 +9,7 @@ import com.example.myapp.models.UnsplashModel
 abstract class BaseUnsplashDetailViewModel : ViewModel() {
     abstract val unsplashModelLiveData: LiveData<UnsplashModel>
     abstract val descriptionTextLiveData: LiveData<DescriptionTextModel>
+    abstract val transitionLiveData: LiveData<String>
 }
 
 class UnsplashDetailViewModel(
@@ -26,5 +27,6 @@ class UnsplashDetailViewModel(
     )
 
     override val descriptionTextLiveData = MutableLiveData(descriptionTextModel)
+    override val transitionLiveData = MutableLiveData(model.id)
 
 }
