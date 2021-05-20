@@ -20,9 +20,9 @@ abstract class BaseUnsplashModel : ViewModel() {
 
     abstract val isLoadingLiveData: LiveData<Boolean>
 
-    abstract val reloadBtnTvEmptyListLiveData: LiveData<Boolean>
+    abstract val reloadBtnTvEmptyListVisibilityLiveData: LiveData<Boolean>
 
-    abstract val rvMainImagesLiveData: LiveData<Boolean>
+    abstract val rvMainVisibilityLiveData: LiveData<Boolean>
 }
 
 class UnsplashViewModel(
@@ -32,17 +32,17 @@ class UnsplashViewModel(
     override val listLiveData = MutableLiveData<List<RowItemType>>()
     override val errorLiveData = MutableLiveData<String>()
     override val isLoadingLiveData = MutableLiveData<Boolean>()
-    override val reloadBtnTvEmptyListLiveData = MutableLiveData<Boolean>() //todo: подумай над названием. несостыковывается название и назначение
-    override val rvMainImagesLiveData = MutableLiveData<Boolean>() //todo: подумай над названием. несостыковывается название и назначение
+    override val reloadBtnTvEmptyListVisibilityLiveData = MutableLiveData<Boolean>()
+    override val rvMainVisibilityLiveData = MutableLiveData<Boolean>()
 
     private val errorHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
             Log.e("UnsplashViewModel", "", throwable)
             throwable.message?.also {
                 errorLiveData.value = it
-                rvMainImagesLiveData.value = false
+                rvMainVisibilityLiveData.value = false
                 isLoadingLiveData.value = false
-                reloadBtnTvEmptyListLiveData.value = true
+                reloadBtnTvEmptyListVisibilityLiveData.value = true
             }
         }
 
@@ -52,21 +52,20 @@ class UnsplashViewModel(
 
     fun loadData() {
         viewModelScope.launch(errorHandler) {
-            reloadBtnTvEmptyListLiveData.value = false
+            reloadBtnTvEmptyListVisibilityLiveData.value = false
             isLoadingLiveData.value = true
             val list = getPhotosUseCase.execute()
             if (list.isNullOrEmpty()) {
                 errorLiveData.value = "List is empty"
-                isLoadingLiveData.value = false //todo: используется и в if и else, можно вынести после них
             } else {
                 val listImages = ArrayList(list).apply {
                     add(0, TextItem("Hi"))
                     add(TextItem("Bye"))
                 }
                 listLiveData.value = listImages
-                isLoadingLiveData.value = false
-                rvMainImagesLiveData.value = true
+                rvMainVisibilityLiveData.value = true
             }
+            isLoadingLiveData.value = false
         }
     }
 
@@ -96,4 +95,34 @@ class UnsplashViewModel(
             model.copy(likesNumber = model.likesNumber + 1, isLiked = true)
         }
     }
+
+    fun deleteItem(modelId: String) {
+        viewModelScope.launch {
+            val list = listLiveData.value ?: return@launch
+            val item = findItemFromList(list, modelId)
+            val rowItemList: List<RowItemType> = ArrayList(list).apply { remove(item) }
+            listLiveData.value = rowItemList
+        }
+    }
+
+    private fun findItemFromList(
+        rowItemList: List<RowItemType>,
+        modelId: String
+    ): UnsplashModel? {
+
+        val unsplashModelList = rowItemList.filterIsInstance<UnsplashModel>()
+        return unsplashModelList.find { it.id == modelId }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+

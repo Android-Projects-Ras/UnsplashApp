@@ -33,7 +33,8 @@ class GetPhotosUseCaseImpl(
             val resultList = ArrayList<RowItemType>(resp)
 
             withContext(Dispatchers.IO) {
-                repository.clearCacheAndRoom()
+                repository.clearRoom()
+                internalCache.clearCache(context)
                 val listEntityWithURIs = cachingImages(resp)
                 addAllModelsToDb(listEntityWithURIs)
             }

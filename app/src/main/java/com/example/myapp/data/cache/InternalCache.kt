@@ -18,6 +18,7 @@ import java.util.*
 interface InternalCache {
     fun loadBitmap(path: String): Bitmap?
     suspend fun saveBitmap(context: Context, bitmap: Bitmap, name: String? = null): Uri
+    suspend fun clearCache(context: Context)
 
 }
 
@@ -41,11 +42,19 @@ class InternalCacheImpl : InternalCache {
     override suspend fun saveBitmap(context: Context, bitmap: Bitmap, name: String?): Uri {
         val fileName = "${name ?: UUID.randomUUID().toString().replace("-", "")}.png"
         val file = File(context.cacheDir.path, fileName)
-        //file.mkdir()
         //creates outputstream to write the file
         FileOutputStream(file).use {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)//write to outputstream
         }
         return file.toUri()
+    }
+
+    override suspend fun clearCache(context: Context) {
+        val path: String = context.cacheDir.path
+        val folder = File(path)
+        val filesInFolder = folder.listFiles()
+        filesInFolder?.forEach {
+            it.delete()
+        }
     }
 }

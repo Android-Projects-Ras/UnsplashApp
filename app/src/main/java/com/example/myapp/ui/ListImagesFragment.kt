@@ -3,7 +3,6 @@ package com.example.myapp.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -36,15 +35,15 @@ class ListImagesFragment :
             itemClickListener = { model, itemImageView ->
                 val extras = FragmentNavigatorExtras(itemImageView to model.id)
                 navigateTo(model, extras)            //navigate to detail fragment
+            },
+            deleteItemListener = { modelId ->
+                viewModel.deleteItem(modelId)
             }
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        postponeEnterTransition() //todo: зачем это, если ты ниже в ресайклере это делаешь
-        view.doOnPreDraw { startPostponedEnterTransition() } //todo: зачем это, если ты ниже в ресайклере это делаешь
         setupRecyclerView()
 
         //for images
@@ -58,13 +57,13 @@ class ListImagesFragment :
             binding.pbMain.isVisible = it
         })
 
-        viewModel.reloadBtnTvEmptyListLiveData.observe(viewLifecycleOwner, {
+        viewModel.reloadBtnTvEmptyListVisibilityLiveData.observe(viewLifecycleOwner, {
             binding.btnMainReload.isVisible = it
             binding.tvEmptyList.isVisible = it
 
         })
 
-        viewModel.rvMainImagesLiveData.observe(viewLifecycleOwner, {
+        viewModel.rvMainVisibilityLiveData.observe(viewLifecycleOwner, {
             binding.rvMainImages.isVisible = it
         })
 
@@ -73,17 +72,12 @@ class ListImagesFragment :
             if (errorText != null) {
                 binding.apply {
                     btnMainReload.setOnClickListener {
-                        reload()
+                        viewModel.loadData()
                     }
                 }
                 Toast.makeText(requireContext(), errorText, Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    //todo: метод этот особо не нужен, можно напрямую метод лайвдаты вызвать
-    private fun reload() {
-        viewModel.loadData()
     }
 
     private fun setupRecyclerView() {

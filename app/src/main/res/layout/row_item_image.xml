@@ -27,5 +27,17 @@
         android:focusable="true"
         app:cardCornerRadius="15dp" />   <!--wow!!!!-->
 
+    <ImageView
+        android:id="@+id/item_pop_up_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_more"
+        android:layout_gravity="end"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"/>
+        <!--android:text="&#8942;"-->
+
 </androidx.cardview.widget.CardView>
 

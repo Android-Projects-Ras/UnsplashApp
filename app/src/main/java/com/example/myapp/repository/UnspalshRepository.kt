@@ -18,7 +18,7 @@ interface UnsplashRepository {
 
     suspend fun getAllModels(): List<UnsplashModelEntity>
 
-    suspend fun clearCacheAndRoom()
+    suspend fun clearRoom()
 
     suspend fun getFileURIs(): List<String>
 }
@@ -46,19 +46,13 @@ class UnsplashRepositoryImpl(
 
     override suspend fun insertAllImages(list: List<UnsplashModelEntity>) {
         unsplashModelDao.insertModels(list)
-
     }
 
     override suspend fun getAllModels(): List<UnsplashModelEntity> {
         return unsplashModelDao.getAllModels()
     }
 
-    override suspend fun clearCacheAndRoom() {
-        val folder = File(path) //todo: лучше вынести удаление кешированных картинок в InternalCache, где ты их кешируешь
-        val filesInFolder = folder.listFiles()
-        filesInFolder?.forEach {
-            it.delete()
-        }
+    override suspend fun clearRoom() {
         val listModels = unsplashModelDao.getAllModels()
         unsplashModelDao.deleteAllModels(listModels)
     }
