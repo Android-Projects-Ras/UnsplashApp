@@ -16,16 +16,21 @@ import com.example.myapp.R
 import com.example.myapp.components.ConnectivityReceiver
 import com.example.myapp.components.SoundVibroService
 import com.example.myapp.databinding.ActivityMainBinding
+import com.example.myapp.databinding.FragmentListImagesBinding
+import com.example.myapp.ui.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var connectivityReceiver: ConnectivityReceiver
+
+    val mainActivityViewModel = get<MainActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.broadcastReceiver -> runBroadcastReciever()
+            R.id.broadcastReceiver -> runBroadcastReceiver()
             R.id.service -> runService()
         }
 
@@ -76,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun runBroadcastReciever() {
-        Toast.makeText(this, "Broadcast Receiver", Toast.LENGTH_SHORT).show()
+    private fun runBroadcastReceiver() {
+        mainActivityViewModel.translateToast(binding)
     }
 }

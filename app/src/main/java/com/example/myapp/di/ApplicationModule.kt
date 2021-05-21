@@ -7,12 +7,12 @@ import com.example.myapp.data.api.UnsplashApi.Companion.BASE_URL
 import com.example.myapp.data.cache.InternalCache
 import com.example.myapp.data.cache.InternalCacheImpl
 import com.example.myapp.data.cache.UnsplashDatabase
-import com.example.myapp.models.UnsplashModel
 import com.example.myapp.repository.UnsplashRepository
 import com.example.myapp.repository.UnsplashRepositoryImpl
 import com.example.myapp.ui.DetailImageFragmentArgs
-import com.example.myapp.ui.UnsplashDetailViewModel
-import com.example.myapp.ui.UnsplashViewModel
+import com.example.myapp.ui.viewmodels.MainActivityViewModel
+import com.example.myapp.ui.viewmodels.UnsplashDetailViewModel
+import com.example.myapp.ui.viewmodels.UnsplashViewModel
 import com.example.myapp.usecases.GetPhotosUseCase
 import com.example.myapp.usecases.GetPhotosUseCaseImpl
 import okhttp3.OkHttpClient
@@ -37,6 +37,10 @@ val viewModelModule = module {
 
     viewModel { (args: DetailImageFragmentArgs) ->
         UnsplashDetailViewModel(args.unsplashModel)
+    }
+
+    viewModel {
+        MainActivityViewModel()
     }
 }
 

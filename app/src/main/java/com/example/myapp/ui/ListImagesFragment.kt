@@ -1,9 +1,6 @@
 package com.example.myapp.ui
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -22,6 +19,9 @@ import com.example.myapp.adapter.VIEW_TYPE_IMAGE
 import com.example.myapp.adapter.VIEW_TYPE_TEXT
 import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
+import com.example.myapp.ui.viewmodels.MainActivityViewModel
+import com.example.myapp.ui.viewmodels.UnsplashViewModel
+import org.koin.android.ext.android.get
 
 
 class ListImagesFragment :
@@ -29,6 +29,8 @@ class ListImagesFragment :
         R.layout.fragment_list_images,
         FragmentListImagesBinding::inflate
     ) {
+
+    val mainActivityViewModel = get<MainActivityViewModel>()
 
     private val myAdapter by lazy {
         MyAdapter(

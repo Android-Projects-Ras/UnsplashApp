@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.example.myapp.view.CustomToast
 
 class ConnectivityReceiver : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.N)

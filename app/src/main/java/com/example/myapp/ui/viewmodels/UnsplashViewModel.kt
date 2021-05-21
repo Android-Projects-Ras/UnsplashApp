@@ -1,4 +1,4 @@
-package com.example.myapp.ui
+package com.example.myapp.ui.viewmodels
 
 import  android.util.Log
 import androidx.lifecycle.LiveData
