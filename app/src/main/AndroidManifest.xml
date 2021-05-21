@@ -3,7 +3,8 @@
     package="com.example.myapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".MainApplication"
@@ -20,6 +21,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".components.ConnectivityReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <!--<action android:name="android.net.wifi.WIFI_STATE_CHANGED" />-->
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".components.SoundVibroService" />
     </application>
 
 </manifest>

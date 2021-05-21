@@ -1,12 +1,11 @@
 package com.example.myapp.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import com.example.myapp.R
 import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ViewModelOwner
 import org.koin.androidx.viewmodel.koin.getViewModel
@@ -22,9 +21,9 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     private val inflate: Inflate<VB>
 ) : Fragment(layoutId) {
 
+
     private var _binding: VB? = null
     val binding get() = _binding!!
-
 
     //Koin, give me viewModel with args
     protected open val viewModel: VM by lazy {
@@ -35,12 +34,18 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
         )
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = inflate.invoke(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -54,6 +59,11 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
     open fun getParameters(): ParametersDefinition = {
         emptyParametersHolder()
     }
+
+    /*override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(menuId, menu) // will apply to all children except for overridden
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

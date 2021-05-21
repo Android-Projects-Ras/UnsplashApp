@@ -1,6 +1,9 @@
 package com.example.myapp.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -40,6 +43,10 @@ class ListImagesFragment :
                 viewModel.deleteItem(modelId)
             }
         )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

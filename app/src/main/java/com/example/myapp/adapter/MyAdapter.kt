@@ -125,7 +125,6 @@ class MyAdapter(
                         when (item.itemId) {
                             R.id.deleteItem -> {
                                 deleteItemListener(model.id)
-                                //bindingAdapter?.notifyItemRemoved(position)
                                 return true
                             }
                             else -> return false

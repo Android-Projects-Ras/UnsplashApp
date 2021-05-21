@@ -68,15 +68,18 @@ class DetailImageFragment ://args
                 .into(binding.ivDetail)
 
             val date = model.createdAt
-            val necessaryDatePart = date.substring(0, 10)
-            val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).run {
-                parse(
-                    necessaryDatePart
-                )
+            if(date != "") {
+                val necessaryDatePart = date.substring(0, 10)
+
+                val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).run {
+                    parse(
+                        necessaryDatePart
+                    )
+                }
+                val myDate = SimpleDateFormat("dd.MM", Locale.ENGLISH).format(parsedDate).toFloat()
+                val dateWithRes = getString(R.string.date_detail_fragment, myDate)
+                binding.tvDate.text = Html.fromHtml(dateWithRes, FROM_HTML_MODE_LEGACY)
             }
-            val myDate = SimpleDateFormat("dd.MM", Locale.ENGLISH).format(parsedDate).toFloat()
-            val dateWithRes = getString(R.string.date_detail_fragment, myDate)
-            binding.tvDate.text = Html.fromHtml(dateWithRes, FROM_HTML_MODE_LEGACY)
         })
 
         viewModel.descriptionTextLiveData.observe(viewLifecycleOwner, {
