@@ -1,8 +1,17 @@
 package com.example.myapp.ui
 
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -17,10 +26,16 @@ import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.adapter.VIEW_TYPE_IMAGE
 import com.example.myapp.adapter.VIEW_TYPE_TEXT
+import com.example.myapp.components.ConnectivityReceiver
+import com.example.myapp.components.SoundVibroService
 import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
 import com.example.myapp.ui.viewmodels.MainActivityViewModel
 import com.example.myapp.ui.viewmodels.UnsplashViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 
@@ -30,7 +45,13 @@ class ListImagesFragment :
         FragmentListImagesBinding::inflate
     ) {
 
-    val mainActivityViewModel = get<MainActivityViewModel>()
+    private val mainActivityViewModel = get<MainActivityViewModel>()
+    private val connectivityReceiver = ConnectivityReceiver(
+        receiverListener = {
+            binding.viewCustomToast.setText(it)
+            mainActivityViewModel.translateToast(binding.viewCustomToast)
+        }
+    )
 
     private val myAdapter by lazy {
         MyAdapter(
@@ -49,6 +70,7 @@ class ListImagesFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -132,5 +154,74 @@ class ListImagesFragment :
         val action =
             ListImagesFragmentDirections.actionListImagesFragmentToDetailImageFragment(model)
         findNavController().safeNavigate(action, extras)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.app_bar_menu, menu)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.broadcastReceiver -> runBroadcastReceiver()
+            R.id.service -> runService()
+        }
+
+        return true
+    }
+
+    fun runService() {
+        val intent = Intent(requireContext(), SoundVibroService::class.java)
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(5000)
+            requireContext().startService(intent)
+            requireContext().stopService(intent)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun runBroadcastReceiver() {
+        requireContext().registerReceiver(
+            connectivityReceiver,
+            IntentFilter("ACT_LOC")
+        )
+        val intent = Intent("ACT_LOC")
+        intent.putExtra("isConnected", isConnected())
+        requireContext().sendBroadcast(intent)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun isConnected(): Boolean {
+        var isConnected: Boolean
+        val cm =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = cm.activeNetworkInfo
+        return networkInfo != null
+
+        //todo:how to return boolean?
+        /*val connectivityManager =
+            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.registerDefaultNetworkCallback(object :
+            ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                isConnected = true
+                return
+                Toast.makeText(this@MainActivity, "Internet available", Toast.LENGTH_SHORT).show()
+
+                Log.d("RogokConReceiver", "onAvailable: ")
+
+            }
+
+            override fun onLost(network: Network) {
+                isConnected = false
+                return
+                Toast.makeText(this@MainActivity, "Internet unavailable", Toast.LENGTH_SHORT).show()
+
+                Log.d("RogokConReceiver", "onUnavailable: ")
+
+            }
+        })
+        return isConnected*/
     }
 }
