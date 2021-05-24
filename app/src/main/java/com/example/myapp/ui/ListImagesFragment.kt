@@ -1,6 +1,5 @@
 package com.example.myapp.ui
 
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
@@ -46,12 +45,10 @@ class ListImagesFragment :
     ) {
 
     private val mainActivityViewModel = get<MainActivityViewModel>()
-    private val connectivityReceiver = ConnectivityReceiver(
-        receiverListener = {
-            binding.viewCustomToast.setText(it)
-            mainActivityViewModel.translateToast(binding.viewCustomToast)
-        }
-    )
+    private val connectivityReceiver = ConnectivityReceiver()
+    private val networkListener by lazy {
+        NetworkStatusListener()
+    }
 
     private val myAdapter by lazy {
         MyAdapter(
@@ -164,7 +161,7 @@ class ListImagesFragment :
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.broadcastReceiver -> runBroadcastReceiver()
+            //R.id.broadcastReceiver -> runBroadcastReceiver()
             R.id.service -> runService()
         }
 
@@ -173,55 +170,18 @@ class ListImagesFragment :
 
     fun runService() {
         val intent = Intent(requireContext(), SoundVibroService::class.java)
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(5000)
             requireContext().startService(intent)
-            requireContext().stopService(intent)
-        }
+
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    /*@RequiresApi(Build.VERSION_CODES.N)
     fun runBroadcastReceiver() {
         requireContext().registerReceiver(
             connectivityReceiver,
-            IntentFilter("ACT_LOC")
+            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         )
-        val intent = Intent("ACT_LOC")
-        intent.putExtra("isConnected", isConnected())
+        val intent = Intent(ConnectivityManager.CONNECTIVITY_ACTION)
+        intent.putExtra("isConnected", networkListener.isConnected)
         requireContext().sendBroadcast(intent)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun isConnected(): Boolean {
-        var isConnected: Boolean
-        val cm =
-            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = cm.activeNetworkInfo
-        return networkInfo != null
-
-        //todo:how to return boolean?
-        /*val connectivityManager =
-            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        connectivityManager.registerDefaultNetworkCallback(object :
-            ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                isConnected = true
-                return
-                Toast.makeText(this@MainActivity, "Internet available", Toast.LENGTH_SHORT).show()
-
-                Log.d("RogokConReceiver", "onAvailable: ")
-
-            }
-
-            override fun onLost(network: Network) {
-                isConnected = false
-                return
-                Toast.makeText(this@MainActivity, "Internet unavailable", Toast.LENGTH_SHORT).show()
-
-                Log.d("RogokConReceiver", "onUnavailable: ")
-
-            }
-        })
-        return isConnected*/
-    }
+    }*/
 }

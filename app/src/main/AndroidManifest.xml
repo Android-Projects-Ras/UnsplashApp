@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".components.SoundVibroService" />
+        <service android:name=".components.SoundVibroService"/>
 
     </application>
 
