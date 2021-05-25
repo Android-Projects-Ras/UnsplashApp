@@ -6,12 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
+    <com.example.myapp.view.CustomToast
+        android:id="@+id/view_custom_toast"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:text="INTERNET" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_graph"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/unsplash_nav_graph" />
+        app:navGraph="@navigation/nav_graph" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

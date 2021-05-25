@@ -118,7 +118,7 @@ class MyAdapter(
                 val currentItem = getItem(position)
                 val popup = PopupMenu(binding.root.context, binding.itemPopUpMenu)
                 //inflating menu from xml resource
-                popup.inflate(R.menu.options_menu);
+                popup.inflate(R.menu.menu_options);
                 //adding click listener
                 popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
                     override fun onMenuItemClick(item: MenuItem): Boolean {

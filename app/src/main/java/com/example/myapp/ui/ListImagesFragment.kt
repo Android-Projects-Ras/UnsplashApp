@@ -1,8 +1,6 @@
 package com.example.myapp.ui
 
 import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -31,10 +29,6 @@ import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
 import com.example.myapp.ui.viewmodels.MainActivityViewModel
 import com.example.myapp.ui.viewmodels.UnsplashViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 
@@ -46,9 +40,7 @@ class ListImagesFragment :
 
     private val mainActivityViewModel = get<MainActivityViewModel>()
     private val connectivityReceiver = ConnectivityReceiver()
-    private val networkListener by lazy {
-        NetworkStatusListener()
-    }
+    val binder = SoundVibroService().soundVibroServiceBinder
 
     private val myAdapter by lazy {
         MyAdapter(
@@ -68,6 +60,7 @@ class ListImagesFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -155,7 +148,7 @@ class ListImagesFragment :
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.app_bar_menu, menu)
+        inflater.inflate(R.menu.menu_app_bar, menu)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -170,18 +163,8 @@ class ListImagesFragment :
 
     fun runService() {
         val intent = Intent(requireContext(), SoundVibroService::class.java)
-            requireContext().startService(intent)
-
+        requireContext().startService(intent)
+        val toastText = binder.getSoundVibroService().getTextForToast()
+        mainActivityViewModel.setToastText(toastText)
     }
-
-    /*@RequiresApi(Build.VERSION_CODES.N)
-    fun runBroadcastReceiver() {
-        requireContext().registerReceiver(
-            connectivityReceiver,
-            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        )
-        val intent = Intent(ConnectivityManager.CONNECTIVITY_ACTION)
-        intent.putExtra("isConnected", networkListener.isConnected)
-        requireContext().sendBroadcast(intent)
-    }*/
 }

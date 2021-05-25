@@ -7,7 +7,7 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.example.myapp.ui.NetworkStatusListener
+import com.example.myapp.data.api.NetworkStatusListener
 
 class ConnectivityReceiver() : BroadcastReceiver() {
     private val networkListener by lazy {
