@@ -32,15 +32,15 @@ val useCaseModule = module {
 val viewModelModule = module {
 
     viewModel {
+        MainActivityViewModel()
+    }
+
+    viewModel {
         UnsplashViewModel(get())
     }
 
     viewModel { (args: DetailImageFragmentArgs) ->
         UnsplashDetailViewModel(args.unsplashModel)
-    }
-
-    viewModel {
-        MainActivityViewModel()
     }
 }
 

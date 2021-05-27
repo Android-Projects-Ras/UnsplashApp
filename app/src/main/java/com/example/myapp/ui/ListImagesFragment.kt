@@ -1,8 +1,13 @@
 package com.example.myapp.ui
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -23,24 +28,25 @@ import com.example.myapp.adapter.CustomItemDecoration
 import com.example.myapp.adapter.MyAdapter
 import com.example.myapp.adapter.VIEW_TYPE_IMAGE
 import com.example.myapp.adapter.VIEW_TYPE_TEXT
-import com.example.myapp.components.ConnectivityReceiver
+import com.example.myapp.components.ServiceCallback
 import com.example.myapp.components.SoundVibroService
 import com.example.myapp.databinding.FragmentListImagesBinding
 import com.example.myapp.models.UnsplashModel
 import com.example.myapp.ui.viewmodels.MainActivityViewModel
 import com.example.myapp.ui.viewmodels.UnsplashViewModel
-import org.koin.android.ext.android.get
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class ListImagesFragment :
     BaseFragment<FragmentListImagesBinding, UnsplashViewModel>(
         R.layout.fragment_list_images,
         FragmentListImagesBinding::inflate
-    ) {
+    ), ServiceCallback {
 
-    private val mainActivityViewModel = get<MainActivityViewModel>()
-    private val connectivityReceiver = ConnectivityReceiver()
-    val binder = SoundVibroService().soundVibroServiceBinder
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
+    private lateinit var soundVibroService: SoundVibroService
+    private val TAG = "ListImagesFragment"
+    var bound = false
 
     private val myAdapter by lazy {
         MyAdapter(
@@ -57,15 +63,37 @@ class ListImagesFragment :
         )
     }
 
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            Log.d(TAG, "onServiceConnected: ")
+            val binder = service as SoundVibroService.SoundVibroServiceBinder
+            soundVibroService = binder.getSoundVibroService()
+            soundVibroService.setCallbacks(this@ListImagesFragment)
+            bound = true
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            bound = false
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        Log.d(TAG, "onCreate: ")
+        val intent = Intent(requireContext(), SoundVibroService::class.java)
+        requireContext().bindService(
+            intent,
+            connection,
+            Context.BIND_AUTO_CREATE
+        )
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        Log.d(TAG, "onViewCreated: ")
 
         //for images
         viewModel.listLiveData.observe(viewLifecycleOwner, {
@@ -99,6 +127,7 @@ class ListImagesFragment :
                 Toast.makeText(requireContext(), errorText, Toast.LENGTH_SHORT).show()
             }
         })
+
     }
 
     private fun setupRecyclerView() {
@@ -154,7 +183,6 @@ class ListImagesFragment :
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            //R.id.broadcastReceiver -> runBroadcastReceiver()
             R.id.service -> runService()
         }
 
@@ -162,9 +190,25 @@ class ListImagesFragment :
     }
 
     fun runService() {
+        Log.d(TAG, "runService: ")
         val intent = Intent(requireContext(), SoundVibroService::class.java)
         requireContext().startService(intent)
-        val toastText = binder.getSoundVibroService().getTextForToast()
-        mainActivityViewModel.setToastText(toastText)
+        /*val toastText = soundVibroService.getTextForToast()
+        mainActivityViewModel.setToastText(toastText)*/
+        /*soundVibroService.callback(simpleCallback = {
+
+            Log.d(TAG, "runService: simpleCallback")
+        })*/
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireContext().unbindService(connection)
+        soundVibroService.setCallbacks(null)
+    }
+
+    override fun doSomething() {
+        Toast.makeText(requireContext(), soundVibroService.getTextForToast(), Toast.LENGTH_SHORT).show()
     }
 }

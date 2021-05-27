@@ -60,11 +60,6 @@ abstract class BaseFragment<VB : ViewBinding, VM : ViewModel>(
         emptyParametersHolder()
     }
 
-    /*override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(menuId, menu) // will apply to all children except for overridden
-    }*/
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
